@@ -20,9 +20,9 @@ public class Main {
             Application app = client.applications().create("prod_ta", obj);
             System.out.println("After creation...");
             System.out.println(app.toString());
-            System.out.println(app.form().toJSONString());
+            System.out.println(app.data().toJSONString());
 
-            ((JSONArray) app.form().get("insurer_list")).add(JSONValue.parse(
+            ((JSONArray) app.data().get("insurer_list")).add(JSONValue.parse(
                     "{\"card_type\":\"I\",\"first_name\":\"SRIKOTE \",\"last_name\":\"NAEWCHAMPA\"," +
                             "\"address\":{\"address_no\":\"315\",\"moo\":\"11\",\"village\":\"\",\"lane\":\"\"," +
                             "\"street\":\"KLANG AWUT\",\"postal_code\":\"34000\",\"province\":\"Ubon Ratchathani\"," +
@@ -30,7 +30,7 @@ public class Main {
                             "\"id_card\":\"1349900696510\",\"birthdate\":\"1995-04-05T07:18:44.543Z\"," +
                             "\"email\":\"srikote@kmi.tl\",\"phone\":\"0868702109\",\"nominee\":null}"));
 
-            app.form().putAll((Map) JSONValue.parse(
+            app.data().putAll((Map) JSONValue.parse(
                     "{\"customer_title\":\"MR.\",\"customer_first_name\":\"SRIKOTE \"," +
                             "\"customer_last_name\":\"NAEWCHAMPA\",\"card_type\":\"I\"," +
                             "\"id_card\":\"1349900696510\",\"email\":\"srikote@kmi.tl\",\"phone\":\"0868702109\"," +
@@ -39,15 +39,15 @@ public class Main {
             client.applications().update(app);
             System.out.println("\nAfter updating...");
             System.out.println(app.toString());
-            System.out.println(app.form().toJSONString());
+            System.out.println(app.data().toJSONString());
 
-            Application app2 = client.applications().get(app.getAppId());
+            Application app2 = client.applications().get(app.getId());
             System.out.println("\nAfter getting...");
             System.out.println(app2.toString());
-            System.out.println(app2.form().toJSONString());
+            System.out.println(app2.data().toJSONString());
 
             System.out.println("\nGet packages...");
-            System.out.println(client.applications().getPackages(app.getAppId()));
+            System.out.println(client.applications().getPackages(app.getId()));
 
             System.out.println("\nGet TA product...");
             System.out.println(client.products().get("prod_ta").toJSONString());

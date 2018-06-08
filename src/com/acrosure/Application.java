@@ -2,18 +2,16 @@ package com.acrosure;
 
 import org.json.simple.JSONObject;
 
-import java.io.IOException;
-
 public class Application {
-    private final String prodId;
-    private final String appId;
-    private final JSONObject form;
+    private final String productId;
+    private final String id;
+    private final JSONObject data;
     private String status;
 
-    Application(String prodId, String appId, JSONObject obj, String status) {
-        this.prodId = prodId;
-        this.appId = appId;
-        this.form = obj;
+    Application(String productId, String id, JSONObject obj, String status) {
+        this.productId = productId;
+        this.id = id;
+        this.data = obj;
         this.status = status;
     }
 
@@ -25,23 +23,23 @@ public class Application {
                 (String) obj.get("status"));
     }
 
-    public JSONObject form() {
-        return form;
+    public JSONObject data() {
+        return data;
     }
 
-    public String getProdId() {
-        return prodId;
+    public String getProductId() {
+        return productId;
     }
 
-    public String getAppId() {
-        return appId;
+    public String getId() {
+        return id;
     }
 
     @Override
     public String toString() {
         return "Application{" +
-                "prodId='" + prodId + '\'' +
-                ", appId='" + appId + '\'' +
+                "productId='" + productId + '\'' +
+                ", id='" + id + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }

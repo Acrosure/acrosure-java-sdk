@@ -73,8 +73,8 @@ public class ApplicationResource {
         JSONObject req = new JSONObject(), res;
         int retCode;
 
-        req.put("application_id", app.getAppId());
-        req.put("form_data", app.form());
+        req.put("application_id", app.getId());
+        req.put("form_data", app.data());
 
         res = caller.call("update", RESOURCE, req);
         retCode = (Integer) res.get("httpCode");
