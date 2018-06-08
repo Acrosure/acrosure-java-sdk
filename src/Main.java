@@ -36,7 +36,8 @@ public class Main {
                             "\"id_card\":\"1349900696510\",\"email\":\"srikote@kmi.tl\",\"phone\":\"0868702109\"," +
                             "\"company_name\":\"SRIKOTE \"}"));
 
-            app.update();
+            client.applications().update(app);
+
             System.out.println("\nAfter updating...");
             System.out.println(app.toString());
             System.out.println(app.form().toJSONString());
