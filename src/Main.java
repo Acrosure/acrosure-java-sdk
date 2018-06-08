@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         String json = "{\"policy_unit\":\"D\",\"insurer_list\":[],\"policy_date\":\"2018-06-20T07:16:00.071Z\","+
                 "\"expiry_date\":\"2018-06-30T07:16:02.461Z\",\"countries\":[\"UNITED ARAB EMIRATES\"]}";
-        Acrosure client = new Acrosure("tokn_sample_public", "This is a secret.");
+        Acrosure client = new Acrosure("tokn_sample_public");
 
         JSONObject obj = (JSONObject) JSONValue.parse(json);
 
@@ -48,10 +48,6 @@ public class Main {
 
             System.out.println("\nGet packages...");
             System.out.println(client.applications().getPackages(app.getId()));
-
-            System.out.println("\nGet TA product...");
-            System.out.println(client.products().get("prod_ta").toJSONString());
-
         } catch (IOException e) {
             e.printStackTrace();
         }

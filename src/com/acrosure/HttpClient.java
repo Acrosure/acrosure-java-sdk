@@ -18,45 +18,46 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-public class AcrosureCaller {
+public class HttpClient {
     private final String token;
-    private final String secret;
+    private final String HOST;
     private final CloseableHttpClient httpClient;
 
-    AcrosureCaller(String token, String secret) {
+    HttpClient(String token) {
         this.token = token;
-        this.secret = secret;
-
         httpClient = HttpClients.createDefault();
+        HOST = "https://api.phantompage.com";
     }
 
-    /**@TODO validate op string
+    /**
+     * @TODO validate method string
      */
-    JSONObject call(String op, String resource, JSONObject param) throws IOException {
-        JSONObject res;
-        HttpRequestBase req = initHttpRequest(op, resource, param);
+    ApiResponse call(String method, String methodGroup, JSONObject param) throws IOException {
+        ApiResponse apiResponse;
+        HttpRequestBase httpRequest = buildHttpRequest(method, methodGroup, param);
 
-        try (CloseableHttpResponse response = httpClient.execute(req)) {
-            StatusLine sl = response.getStatusLine();
-            HttpEntity recEntity = response.getEntity();
+        try (CloseableHttpResponse httpResponse = httpClient.execute(httpRequest)) {
+            StatusLine statusLine = httpResponse.getStatusLine();
+            HttpEntity recEntity = httpResponse.getEntity();
             BufferedReader content = new BufferedReader(new InputStreamReader(
                     recEntity.getContent(),
                     StandardCharsets.UTF_8));
 
-            res = buildJson(sl, content);
+            apiResponse = new ApiResponse(statusLine.getStatusCode(), parseJson(content));
             EntityUtils.consume(recEntity);
         }
 
-        return res;
+        return apiResponse;
     }
 
-    /**@TODO Is it gonna be POST for all of the requests?
+    /**
+     * @TODO Is it gonna be POST for all of the requests?
      */
-    private HttpRequestBase initHttpRequest(String op, String res, JSONObject param) {
+    private HttpRequestBase buildHttpRequest(String method, String methodGroup, JSONObject param) {
         StringEntity entity = new StringEntity(
                 param.toJSONString(),
                 ContentType.create("application/json", "UTF-8"));
-        HttpPost httpPost = new HttpPost("https://api.phantompage.com" + "/" + res + "/" + op);
+        HttpPost httpPost = new HttpPost(HOST + "/" + methodGroup + "/" + method);
 
         httpPost.addHeader("Authorization", "Bearer " + this.token);
         httpPost.setEntity(entity);
@@ -64,23 +65,20 @@ public class AcrosureCaller {
         return httpPost;
     }
 
-    private JSONObject buildJson(StatusLine sl, BufferedReader content) throws IOException {
-        StringBuilder json = new StringBuilder("");
+    private JSONObject parseJson(BufferedReader content) throws IOException {
+        StringBuilder jsonString = new StringBuilder("");
 
         while (content.ready())
-            json.append(content.readLine());
+            jsonString.append(content.readLine());
 
-        JSONObject obj = (JSONObject) JSONValue.parse(json.toString());
+        JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonString.toString());
 
-        obj.put("httpCode", sl.getStatusCode());
-        obj.put("httpMessage", sl.getReasonPhrase());
-
-        return obj;
+        return jsonObject;
     }
 
-    private void printContent(BufferedReader c) throws IOException {
-        while (c.ready())
-            System.out.print(c.readLine());
+    private void printContent(BufferedReader content) throws IOException {
+        while (content.ready())
+            System.out.print(content.readLine());
 
         System.out.println();
     }

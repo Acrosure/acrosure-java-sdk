@@ -5,87 +5,80 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 
 public class ApplicationResource {
-    private final AcrosureCaller caller;
+    private final HttpClient httpClient;
     private final String RESOURCE;
 
-    ApplicationResource(AcrosureCaller caller) {
-        this.caller = caller;
+    ApplicationResource(HttpClient httpClient) {
+        this.httpClient = httpClient;
         RESOURCE = "applications";
     }
 
-    public Application get(String appId) throws IOException {
-        JSONObject req = new JSONObject(), res;
-        int retCode;
+    public Application get(String applicationId) throws IOException {
+        ApiResponse apiResponse;
+        JSONObject requestPayload = new JSONObject();
 
-        req.put("application_id", appId);
-        res = caller.call("get", RESOURCE, req);
-        retCode = (Integer) res.get("httpCode");
+        requestPayload.put("application_id", applicationId);
+        apiResponse = httpClient.call("get", RESOURCE, requestPayload);
 
-        if (retCode == 200)
-            return new Application((JSONObject) res.get("data"));
-        else
+        if (apiResponse.getHttpStatus() != 200)
             throw new RuntimeException(
-                    "Status: " + retCode + ", " + res.get("httpMessage") + "\n" + res.get("message"));
+                    "Status: " + apiResponse.getHttpStatus() + "," + apiResponse.getContent().get("message"));
+
+        return new Application((JSONObject) apiResponse.getContent().get("data"));
     }
 
-    public JSONObject getPackages(String appId) throws IOException {
-        JSONObject req = new JSONObject(), res;
-        int retCode;
+    public JSONObject getPackages(String applicationId) throws IOException {
+        ApiResponse apiResponse;
+        JSONObject requestPayload = new JSONObject();
 
-        req.put("application_id", appId);
-        res = caller.call("get-packages", RESOURCE, req);
-        retCode = (Integer) res.get("httpCode");
+        requestPayload.put("application_id", applicationId);
+        apiResponse = httpClient.call("get-packages", RESOURCE, requestPayload);
 
-        if (retCode == 200) {
-            res.remove("httpCode");
-            res.remove("httpMessage");
-        } else {
+        if (apiResponse.getHttpStatus() != 200)
             throw new RuntimeException(
-                    "Status: " + retCode + ", " + res.get("httpMessage") + "\n" + res.get("message"));
-        }
+                    "Status: " + apiResponse.getHttpStatus() + "," + apiResponse.getContent().get("message"));
 
-        return res;
+        return apiResponse.getContent();
     }
 
-    /**@TODO How to handle errors from server? (Not errors from Java itself)
+    /**
+     * @TODO How to handle errors from server? (Not errors from Java itself)
      */
-    public Application create(String prodId, JSONObject obj) throws IOException {
-        Application app;
-        int retCode;
-        JSONObject req = new JSONObject(), res;
+    public Application create(String productId, JSONObject data) throws IOException {
+        ApiResponse apiResponse;
+        JSONObject requestPayload = new JSONObject();
 
-        req.put("product_id", prodId);
-        req.put("form_data", obj);
+        requestPayload.put("product_id", productId);
+        requestPayload.put("form_data", data);
 
-        res = caller.call("create", RESOURCE, req);
-        retCode = (Integer) res.get("httpCode");
+        apiResponse = httpClient.call("create", RESOURCE, requestPayload);
 
-        if (retCode == 200)
-            app = new Application(prodId, (String) ((JSONObject) res.get("data")).get("id"), obj, "INITIAL");
-        else
+        if (apiResponse.getHttpStatus() != 200)
             throw new RuntimeException(
-                    "Status: " + retCode + ", " + res.get("httpMessage") + "\n" + res.get("message"));
+                    "Status: " + apiResponse.getHttpStatus() + "," + apiResponse.getContent().get("message"));
 
-        return app;
+        return new Application(
+                productId,
+                (String) ((JSONObject) apiResponse.getContent().get("data")).get("id"),
+                data,
+                "INITIAL");
     }
 
-    public Application update(Application app) throws IOException {
-        JSONObject req = new JSONObject(), res;
-        int retCode;
+    public Application update(Application application) throws IOException {
+        ApiResponse apiResponse;
+        JSONObject requestPayload = new JSONObject();
 
-        req.put("application_id", app.getId());
-        req.put("form_data", app.data());
+        requestPayload.put("application_id", application.getId());
+        requestPayload.put("form_data", application.data());
 
-        res = caller.call("update", RESOURCE, req);
-        retCode = (Integer) res.get("httpCode");
+        apiResponse = httpClient.call("update", RESOURCE, requestPayload);
 
-        if (retCode == 200) {
-            app.setStatus((String) ((JSONObject) res.get("data")).get("status"));
-        } else {
+        if (apiResponse.getHttpStatus() != 200)
             throw new RuntimeException(
-                    "Status: " + retCode + ", " + res.get("httpMessage") + "\n" + res.get("message"));
-        }
+                    "Status: " + apiResponse.getHttpStatus() + "," + apiResponse.getContent().get("message"));
 
-        return app;
+        application.setStatus((String) ((JSONObject) apiResponse.getContent().get("data")).get("status"));
+
+        return application;
     }
 }
