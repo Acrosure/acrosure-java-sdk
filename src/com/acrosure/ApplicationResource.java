@@ -5,14 +5,49 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 
 public class ApplicationResource {
-    private AcrosureCaller caller;
+    private final AcrosureCaller caller;
+    private final String RESOURCE;
 
     ApplicationResource(AcrosureCaller caller) {
         this.caller = caller;
+        RESOURCE = "applications";
     }
 
-    /**@TODO What if the application is already created!?
-     * @TODO How to handle errors from server? (Not errors from Java itself)
+    public Application get(String appId) throws IOException {
+        JSONObject req = new JSONObject(), res;
+        int retCode;
+
+        req.put("application_id", appId);
+        res = caller.call("get", RESOURCE, req);
+        retCode = (Integer) res.get("httpCode");
+
+        if (retCode == 200)
+            return new Application((JSONObject) res.get("data"));
+        else
+            throw new RuntimeException(
+                    "Status: " + retCode + ", " + res.get("httpMessage") + "\n" + res.get("message"));
+    }
+
+    public JSONObject getPackages(String appId) throws IOException {
+        JSONObject req = new JSONObject(), res;
+        int retCode;
+
+        req.put("application_id", appId);
+        res = caller.call("get-packages", RESOURCE, req);
+        retCode = (Integer) res.get("httpCode");
+
+        if (retCode == 200) {
+            res.remove("httpCode");
+            res.remove("httpMessage");
+        } else {
+            throw new RuntimeException(
+                    "Status: " + retCode + ", " + res.get("httpMessage") + "\n" + res.get("message"));
+        }
+
+        return res;
+    }
+
+    /**@TODO How to handle errors from server? (Not errors from Java itself)
      */
     public Application create(String prodId, JSONObject obj) throws IOException {
         Application app;
@@ -21,15 +56,12 @@ public class ApplicationResource {
 
         req.put("product_id", prodId);
         req.put("form_data", obj);
-        req.put("ref1", null);
-        req.put("ref2", null);
-        req.put("ref3", null);
 
-        res = caller.call("create", req);
+        res = caller.call("create", RESOURCE, req);
         retCode = (Integer) res.get("httpCode");
 
         if (retCode == 200)
-            app = new Application(prodId, (String) ((JSONObject) res.get("data")).get("id"), obj);
+            app = new Application(prodId, (String) ((JSONObject) res.get("data")).get("id"), obj, "INITIAL");
         else
             throw new RuntimeException(
                     "Status: " + retCode + ", " + res.get("httpMessage") + "\n" + res.get("message"));
@@ -43,16 +75,16 @@ public class ApplicationResource {
 
         req.put("application_id", app.getAppId());
         req.put("form_data", app.form());
-        req.put("ref1", null);
-        req.put("ref2", null);
-        req.put("ref3", null);
 
-        res = caller.call("update", req);
+        res = caller.call("update", RESOURCE, req);
         retCode = (Integer) res.get("httpCode");
 
-        if (retCode != 200)
+        if (retCode == 200) {
+            app.setStatus((String) ((JSONObject) res.get("data")).get("status"));
+        } else {
             throw new RuntimeException(
                     "Status: " + retCode + ", " + res.get("httpMessage") + "\n" + res.get("message"));
+        }
 
         return app;
     }

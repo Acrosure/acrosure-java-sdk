@@ -18,7 +18,7 @@ public class Main {
 
         try {
             Application app = client.applications().create("prod_ta", obj);
-
+            System.out.println("After creation...");
             System.out.println(app.toString());
             System.out.println(app.form().toJSONString());
 
@@ -37,10 +37,20 @@ public class Main {
                             "\"company_name\":\"SRIKOTE \"}"));
 
             client.applications().update(app);
-
             System.out.println("\nAfter updating...");
             System.out.println(app.toString());
             System.out.println(app.form().toJSONString());
+
+            Application app2 = client.applications().get(app.getAppId());
+            System.out.println("\nAfter getting...");
+            System.out.println(app2.toString());
+            System.out.println(app2.form().toJSONString());
+
+            System.out.println("\nGet packages...");
+            System.out.println(client.applications().getPackages(app.getAppId()));
+
+            System.out.println("\nGet TA product...");
+            System.out.println(client.products().get("prod_ta").toJSONString());
 
         } catch (IOException e) {
             e.printStackTrace();

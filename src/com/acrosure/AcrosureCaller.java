@@ -17,30 +17,24 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AcrosureCaller {
     private final String token;
     private final String secret;
     private final CloseableHttpClient httpClient;
-    private final Map operationMap;
 
     AcrosureCaller(String token, String secret) {
         this.token = token;
         this.secret = secret;
 
         httpClient = HttpClients.createDefault();
-        operationMap = new HashMap();
-
-        initOperationMap(operationMap);
     }
 
     /**@TODO validate op string
      */
-    JSONObject call(String op, JSONObject param) throws IOException {
+    JSONObject call(String op, String resource, JSONObject param) throws IOException {
         JSONObject res;
-        HttpRequestBase req = initHttpRequest(op, param);
+        HttpRequestBase req = initHttpRequest(op, resource, param);
 
         try (CloseableHttpResponse response = httpClient.execute(req)) {
             StatusLine sl = response.getStatusLine();
@@ -58,11 +52,11 @@ public class AcrosureCaller {
 
     /**@TODO Is it gonna be POST for all of the requests?
      */
-    private HttpRequestBase initHttpRequest(String op, JSONObject param) {
+    private HttpRequestBase initHttpRequest(String op, String res, JSONObject param) {
         StringEntity entity = new StringEntity(
                 param.toJSONString(),
                 ContentType.create("application/json", "UTF-8"));
-        HttpPost httpPost = new HttpPost("https://api.phantompage.com" + operationMap.get(op) + op);
+        HttpPost httpPost = new HttpPost("https://api.phantompage.com" + "/" + res + "/" + op);
 
         httpPost.addHeader("Authorization", "Bearer " + this.token);
         httpPost.setEntity(entity);
@@ -89,13 +83,5 @@ public class AcrosureCaller {
             System.out.print(c.readLine());
 
         System.out.println();
-    }
-
-    private void initOperationMap(Map opMap) {
-        opMap.put("create", "/web/applications/");
-        opMap.put("update", "/web/applications/");
-        opMap.put("get-packages", "/web/applications/");
-        opMap.put("get", "/products/");
-        opMap.put("get-values", "/validator/");
     }
 }

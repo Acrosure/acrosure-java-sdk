@@ -8,11 +8,21 @@ public class Application {
     private final String prodId;
     private final String appId;
     private final JSONObject form;
+    private String status;
 
-    Application(String prodId, String appId, JSONObject obj) {
+    Application(String prodId, String appId, JSONObject obj, String status) {
         this.prodId = prodId;
         this.appId = appId;
         this.form = obj;
+        this.status = status;
+    }
+
+    Application(JSONObject obj) {
+        this(
+                (String) obj.get("product_id"),
+                (String) obj.get("id"),
+                (JSONObject) obj.get("form_data"),
+                (String) obj.get("status"));
     }
 
     public JSONObject form() {
@@ -32,6 +42,15 @@ public class Application {
         return "Application{" +
                 "prodId='" + prodId + '\'' +
                 ", appId='" + appId + '\'' +
+                ", status='" + status + '\'' +
                 '}';
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    void setStatus(String status) {
+        this.status = status;
     }
 }
