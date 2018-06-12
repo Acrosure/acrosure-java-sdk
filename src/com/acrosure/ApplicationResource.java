@@ -61,7 +61,7 @@ public class ApplicationResource {
         return application;
     }
 
-    public Application setPackage(String pakageId) {
+    public Application setPackage(String pakageCode, Application application) {
         return null;
     }
 }
