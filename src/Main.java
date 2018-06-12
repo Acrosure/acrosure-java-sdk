@@ -1,4 +1,5 @@
 import com.acrosure.Acrosure;
+import com.acrosure.AcrosureException;
 import com.acrosure.Application;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -49,6 +50,9 @@ public class Main {
             System.out.println("\nGet packages...");
             System.out.println(client.applications().getPackages(app.getId()));
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (AcrosureException e) {
+            System.out.println(e.getMessage() + ", " + e.getStatusCode());
             e.printStackTrace();
         }
     }

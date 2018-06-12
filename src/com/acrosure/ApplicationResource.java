@@ -1,5 +1,6 @@
 package com.acrosure;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -13,72 +14,54 @@ public class ApplicationResource {
         RESOURCE = "applications";
     }
 
-    public Application get(String applicationId) throws IOException {
-        ApiResponse apiResponse;
-        JSONObject requestPayload = new JSONObject();
+    public Application get(String applicationId) throws IOException, AcrosureException {
+        JSONObject requestPayload = new JSONObject(), responseData;
 
         requestPayload.put("application_id", applicationId);
-        apiResponse = httpClient.call("get", RESOURCE, requestPayload);
+        responseData = (JSONObject) httpClient.call("get", RESOURCE, requestPayload);
 
-        if (apiResponse.getHttpStatus() != 200)
-            throw new RuntimeException(
-                    "Status: " + apiResponse.getHttpStatus() + "," + apiResponse.getContent().get("message"));
-
-        return new Application((JSONObject) apiResponse.getContent().get("data"));
+        return new Application(responseData);
     }
 
-    public JSONObject getPackages(String applicationId) throws IOException {
-        ApiResponse apiResponse;
+    public JSONArray getPackages(String applicationId) throws IOException, AcrosureException {
         JSONObject requestPayload = new JSONObject();
+        JSONArray responseData;
 
         requestPayload.put("application_id", applicationId);
-        apiResponse = httpClient.call("get-packages", RESOURCE, requestPayload);
+        responseData = (JSONArray) httpClient.call("get-packages", RESOURCE, requestPayload);
 
-        if (apiResponse.getHttpStatus() != 200)
-            throw new RuntimeException(
-                    "Status: " + apiResponse.getHttpStatus() + "," + apiResponse.getContent().get("message"));
-
-        return apiResponse.getContent();
+        return responseData;
     }
 
-    /**
-     * @TODO How to handle errors from server? (Not errors from Java itself)
-     */
-    public Application create(String productId, JSONObject data) throws IOException {
-        ApiResponse apiResponse;
-        JSONObject requestPayload = new JSONObject();
+
+    public Application create(String productId, JSONObject data) throws IOException, AcrosureException {
+        JSONObject requestPayload = new JSONObject(), responseData;
 
         requestPayload.put("product_id", productId);
         requestPayload.put("form_data", data);
 
-        apiResponse = httpClient.call("create", RESOURCE, requestPayload);
-
-        if (apiResponse.getHttpStatus() != 200)
-            throw new RuntimeException(
-                    "Status: " + apiResponse.getHttpStatus() + "," + apiResponse.getContent().get("message"));
+        responseData = (JSONObject) httpClient.call("create", RESOURCE, requestPayload);
 
         return new Application(
                 productId,
-                (String) ((JSONObject) apiResponse.getContent().get("data")).get("id"),
+                (String) responseData.get("id"),
                 data,
                 "INITIAL");
     }
 
-    public Application update(Application application) throws IOException {
-        ApiResponse apiResponse;
-        JSONObject requestPayload = new JSONObject();
+    public Application update(Application application) throws IOException, AcrosureException {
+        JSONObject requestPayload = new JSONObject(), responseData;
 
         requestPayload.put("application_id", application.getId());
         requestPayload.put("form_data", application.data());
 
-        apiResponse = httpClient.call("update", RESOURCE, requestPayload);
-
-        if (apiResponse.getHttpStatus() != 200)
-            throw new RuntimeException(
-                    "Status: " + apiResponse.getHttpStatus() + "," + apiResponse.getContent().get("message"));
-
-        application.setStatus((String) ((JSONObject) apiResponse.getContent().get("data")).get("status"));
+        responseData = (JSONObject) httpClient.call("update", RESOURCE, requestPayload);
+        application.setStatus((String) responseData.get("status"));
 
         return application;
+    }
+
+    public Application setPackage(String pakageId) {
+        return null;
     }
 }

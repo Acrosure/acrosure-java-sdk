@@ -10,6 +10,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -32,22 +33,28 @@ public class HttpClient {
     /**
      * @TODO validate method string
      */
-    ApiResponse call(String method, String methodGroup, JSONObject param) throws IOException {
-        ApiResponse apiResponse;
+    JSONAware call(String method, String methodGroup, JSONObject param) throws IOException, AcrosureException {
+        JSONObject apiResponse;
         HttpRequestBase httpRequest = buildHttpRequest(method, methodGroup, param);
 
         try (CloseableHttpResponse httpResponse = httpClient.execute(httpRequest)) {
+            int statusCode;
             StatusLine statusLine = httpResponse.getStatusLine();
             HttpEntity recEntity = httpResponse.getEntity();
             BufferedReader content = new BufferedReader(new InputStreamReader(
                     recEntity.getContent(),
                     StandardCharsets.UTF_8));
 
-            apiResponse = new ApiResponse(statusLine.getStatusCode(), parseJson(content));
+            apiResponse = parseJson(content);
+            statusCode = statusLine.getStatusCode();
             EntityUtils.consume(recEntity);
+
+            if (statusCode != 200) {
+                throw new AcrosureException((String) apiResponse.get("message"), statusCode);
+            }
         }
 
-        return apiResponse;
+        return (JSONAware) apiResponse.get("data");
     }
 
     /**
