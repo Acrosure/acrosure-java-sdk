@@ -17,7 +17,7 @@ public class Policy {
     private final URL policyUrl;
     private final double amount;
     private final double amountWithTax;
-    private final String status;
+    private final PolicyStatus status;
     private final String insurerId;
     private final String firstName;
     private final String lastName;
@@ -43,7 +43,7 @@ public class Policy {
            URL policyUrl,
            double amount,
            double amountWithTax,
-           String status,
+           PolicyStatus status,
            String insurerId,
            String firstName,
            String lastName,
@@ -119,7 +119,7 @@ public class Policy {
         return amountWithTax;
     }
 
-    public String getStatus() {
+    public PolicyStatus getStatus() {
         return status;
     }
 
@@ -207,7 +207,7 @@ public class Policy {
                 policyUrl.equals("") ? null : new URL(policyUrl),
                 (Double) jsonObject.get("amount"),
                 (Long) jsonObject.get("amount_with_tax"),
-                (String) jsonObject.get("status"),
+                PolicyStatus.valueOf((String) jsonObject.get("status")),
                 (String) jsonObject.get("insurer_id"),
                 (String) jsonObject.get("first_name"),
                 (String) jsonObject.get("last_name"),
