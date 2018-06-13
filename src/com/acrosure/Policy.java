@@ -188,7 +188,7 @@ public class Policy {
     }
 
     static Policy parseJson(JSONObject jsonObject, Application application) throws ParseException, MalformedURLException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss");
         String insurerPolicyUrl = (String) jsonObject.get("insurer_policy_url");
         String policyUrl = (String) jsonObject.get("policy_url");
         String signedPolicyUrl = (String) jsonObject.get("signed_policy_url");
