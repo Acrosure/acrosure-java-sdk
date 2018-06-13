@@ -1,11 +1,13 @@
 import com.acrosure.Acrosure;
 import com.acrosure.AcrosureException;
 import com.acrosure.Application;
+import com.acrosure.InsurancePackage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Main {
@@ -19,9 +21,9 @@ public class Main {
 
         try {
             Application app = client.applications().create("prod_ta", obj);
-            System.out.println("After creation...");
-            System.out.println(app.toString());
-            System.out.println(app.data().toJSONString());
+            System.out.println("After creating application...");
+            System.out.println(app);
+//            System.out.println(app.data().toJSONString());
 
             ((JSONArray) app.data().get("insurer_list")).add(JSONValue.parse(
                     "{\"card_type\":\"I\",\"first_name\":\"SRIKOTE \",\"last_name\":\"NAEWCHAMPA\"," +
@@ -38,17 +40,23 @@ public class Main {
                             "\"company_name\":\"SRIKOTE \"}"));
 
             client.applications().update(app);
-            System.out.println("\nAfter updating...");
-            System.out.println(app.toString());
-            System.out.println(app.data().toJSONString());
+            System.out.println("\nAfter updating application...");
+            System.out.println(app);
+//            System.out.println(app.data().toJSONString());
 
             Application app2 = client.applications().get(app.getId());
-            System.out.println("\nAfter getting...");
-            System.out.println(app2.toString());
-            System.out.println(app2.data().toJSONString());
+            System.out.println("\nAfter getting application...");
+            System.out.println(app2);
+//            System.out.println(app2.data().toJSONString());
 
-            System.out.println("\nGet packages...");
-            System.out.println(client.applications().getPackages(app.getId()));
+            ArrayList<InsurancePackage> insurancePackages = client.applications().getPackages(app.getId());
+            System.out.println("\nAfter getting packages...");
+            System.out.println(insurancePackages);
+
+            app2.setPackage(insurancePackages.get(1));
+            client.applications().update(app2);
+            System.out.println("\nAfter updating application(2)...");
+            System.out.println(app2);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (AcrosureException e) {

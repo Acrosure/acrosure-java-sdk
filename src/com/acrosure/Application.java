@@ -6,13 +6,19 @@ public class Application {
     private final String productId;
     private final String id;
     private final JSONObject data;
-    private String status;
+    private ApplicationStatus status;
+    private InsurancePackage insurancePackage;
 
-    Application(String productId, String id, JSONObject obj, String status) {
+    Application(String productId, String id, JSONObject obj, ApplicationStatus status) {
         this.productId = productId;
         this.id = id;
         this.data = obj;
         this.status = status;
+        insurancePackage = null;
+    }
+
+    Application(String productId, String id, JSONObject obj) {
+        this(productId, id, obj, ApplicationStatus.INITIAL);
     }
 
     Application(JSONObject obj) {
@@ -20,7 +26,7 @@ public class Application {
                 (String) obj.get("product_id"),
                 (String) obj.get("id"),
                 (JSONObject) obj.get("form_data"),
-                (String) obj.get("status"));
+                ApplicationStatus.valueOf((String) obj.get("status")));
     }
 
     public JSONObject data() {
@@ -35,20 +41,29 @@ public class Application {
         return id;
     }
 
+    public ApplicationStatus getStatus() {
+        return status;
+    }
+
+    void setStatus(ApplicationStatus status) {
+        this.status = status;
+    }
+
+    public void setPackage(InsurancePackage insurancePackage) {
+        this.insurancePackage = insurancePackage;
+    }
+
+    public InsurancePackage getInsurancePackage() {
+        return insurancePackage;
+    }
+
     @Override
     public String toString() {
         return "Application{" +
                 "productId='" + productId + '\'' +
                 ", id='" + id + '\'' +
-                ", status='" + status + '\'' +
+                ", status=" + status +
+                ", insurancePackage=" + insurancePackage +
                 '}';
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    void setStatus(String status) {
-        this.status = status;
     }
 }

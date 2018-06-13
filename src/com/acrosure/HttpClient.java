@@ -30,9 +30,6 @@ public class HttpClient {
         HOST = "https://api.phantompage.com";
     }
 
-    /**
-     * @TODO validate method string
-     */
     JSONAware call(String method, String methodGroup, JSONObject param) throws IOException, AcrosureException {
         JSONObject apiResponse;
         HttpRequestBase httpRequest = buildHttpRequest(method, methodGroup, param);
@@ -57,9 +54,6 @@ public class HttpClient {
         return (JSONAware) apiResponse.get("data");
     }
 
-    /**
-     * @TODO Is it gonna be POST for all of the requests?
-     */
     private HttpRequestBase buildHttpRequest(String method, String methodGroup, JSONObject param) {
         StringEntity entity = new StringEntity(
                 param.toJSONString(),

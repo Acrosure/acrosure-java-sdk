@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ApplicationResource {
     private final HttpClient httpClient;
@@ -23,14 +24,19 @@ public class ApplicationResource {
         return new Application(responseData);
     }
 
-    public JSONArray getPackages(String applicationId) throws IOException, AcrosureException {
+    public ArrayList<InsurancePackage> getPackages(String applicationId) throws IOException, AcrosureException {
         JSONObject requestPayload = new JSONObject();
         JSONArray responseData;
+        ArrayList<InsurancePackage> insurancePackages = new ArrayList<>();
 
         requestPayload.put("application_id", applicationId);
         responseData = (JSONArray) httpClient.call("get-packages", RESOURCE, requestPayload);
 
-        return responseData;
+        for (Object object: responseData) {
+            insurancePackages.add(new InsurancePackage((JSONObject) object));
+        }
+
+        return insurancePackages;
     }
 
 
@@ -42,26 +48,25 @@ public class ApplicationResource {
 
         responseData = (JSONObject) httpClient.call("create", RESOURCE, requestPayload);
 
-        return new Application(
-                productId,
-                (String) responseData.get("id"),
-                data,
-                "INITIAL");
+        return new Application(productId, (String) responseData.get("id"), data, ApplicationStatus.INITIAL);
     }
 
     public Application update(Application application) throws IOException, AcrosureException {
         JSONObject requestPayload = new JSONObject(), responseData;
+        InsurancePackage insurancePackage = application.getInsurancePackage();
 
         requestPayload.put("application_id", application.getId());
         requestPayload.put("form_data", application.data());
 
+        if (insurancePackage != null) {
+            requestPayload.put("insurer_package_code", insurancePackage.getInsurerPackageCode());
+            requestPayload.put("amount", insurancePackage.getAmount());
+            requestPayload.put("amount_with_tax", insurancePackage.getAmountWithTax());
+        }
+
         responseData = (JSONObject) httpClient.call("update", RESOURCE, requestPayload);
-        application.setStatus((String) responseData.get("status"));
+        application.setStatus(ApplicationStatus.valueOf((String) responseData.get("status")));
 
         return application;
-    }
-
-    public Application setPackage(String pakageCode, Application application) {
-        return null;
     }
 }
