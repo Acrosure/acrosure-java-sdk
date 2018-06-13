@@ -47,7 +47,10 @@ public class HttpClient {
             EntityUtils.consume(recEntity);
 
             if (statusCode != 200) {
-                throw new AcrosureException((String) apiResponse.get("message"), statusCode);
+                if (apiResponse == null)
+                    throw new AcrosureException(statusLine.getReasonPhrase(), statusCode);
+                else
+                    throw new AcrosureException((String) apiResponse.get("message"), statusCode);
             }
         }
 

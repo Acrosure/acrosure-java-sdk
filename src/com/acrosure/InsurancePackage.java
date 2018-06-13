@@ -9,12 +9,12 @@ public class InsurancePackage {
     private final double amountWithTax;
     private final JSONObject raw;
 
-    InsurancePackage(JSONObject object) {
-        this.insurerPackageCode = (String) object.get("insurer_package_code");
-        this.name = (String) object.get("name");
-        this.amount = (Double) object.get("amount");
-        this.amountWithTax = (Long) object.get("amount_with_tax");
-        this.raw = object;
+    InsurancePackage(String insurerPackageCode, String name, double amount, double amountWithTax, JSONObject raw) {
+        this.insurerPackageCode = insurerPackageCode;
+        this.name = name;
+        this.amount = amount;
+        this.amountWithTax = amountWithTax;
+        this.raw = raw;
     }
 
     @Override

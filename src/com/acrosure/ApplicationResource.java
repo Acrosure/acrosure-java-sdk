@@ -4,24 +4,29 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class ApplicationResource {
     private final HttpClient httpClient;
-    private final String RESOURCE;
+    private final String METHOD_GROUP;
 
     ApplicationResource(HttpClient httpClient) {
         this.httpClient = httpClient;
-        RESOURCE = "applications";
+        METHOD_GROUP = "applications";
     }
 
     public Application get(String applicationId) throws IOException, AcrosureException {
         JSONObject requestPayload = new JSONObject(), responseData;
 
         requestPayload.put("application_id", applicationId);
-        responseData = (JSONObject) httpClient.call("get", RESOURCE, requestPayload);
+        responseData = (JSONObject) httpClient.call("get", METHOD_GROUP, requestPayload);
 
-        return new Application(responseData);
+        return new Application(
+                (String) responseData.get("product_id"),
+                (String) responseData.get("id"),
+                (JSONObject) responseData.get("form_data"),
+                ApplicationStatus.valueOf((String) responseData.get("status")));
     }
 
     public ArrayList<InsurancePackage> getPackages(String applicationId) throws IOException, AcrosureException {
@@ -30,10 +35,16 @@ public class ApplicationResource {
         ArrayList<InsurancePackage> insurancePackages = new ArrayList<>();
 
         requestPayload.put("application_id", applicationId);
-        responseData = (JSONArray) httpClient.call("get-packages", RESOURCE, requestPayload);
+        responseData = (JSONArray) httpClient.call("get-packages", METHOD_GROUP, requestPayload);
 
         for (Object object: responseData) {
-            insurancePackages.add(new InsurancePackage((JSONObject) object));
+            JSONObject jsonObject = (JSONObject) object;
+            insurancePackages.add(new InsurancePackage(
+                    (String) jsonObject.get("insurer_package_code"),
+                    (String) jsonObject.get("name"),
+                    (Double) jsonObject.get("amount"),
+                    (Long) jsonObject.get("amount_with_tax"),
+                    jsonObject));
         }
 
         return insurancePackages;
@@ -46,7 +57,7 @@ public class ApplicationResource {
         requestPayload.put("product_id", productId);
         requestPayload.put("form_data", data);
 
-        responseData = (JSONObject) httpClient.call("create", RESOURCE, requestPayload);
+        responseData = (JSONObject) httpClient.call("create", METHOD_GROUP, requestPayload);
 
         return new Application(productId, (String) responseData.get("id"), data, ApplicationStatus.INITIAL);
     }
@@ -64,9 +75,24 @@ public class ApplicationResource {
             requestPayload.put("amount_with_tax", insurancePackage.getAmountWithTax());
         }
 
-        responseData = (JSONObject) httpClient.call("update", RESOURCE, requestPayload);
+        responseData = (JSONObject) httpClient.call("update", METHOD_GROUP, requestPayload);
         application.setStatus(ApplicationStatus.valueOf((String) responseData.get("status")));
 
         return application;
+    }
+
+    public ArrayList<Policy> confirm(Application application) throws IOException, AcrosureException, ParseException {
+        JSONObject requestPayload = new JSONObject();
+        JSONArray responseData;
+        ArrayList<Policy> policies = new ArrayList<>();
+
+        requestPayload.put("application_id", application.getId());
+        responseData = (JSONArray) httpClient.call("confirm", METHOD_GROUP, requestPayload);
+        application.setStatus(ApplicationStatus.COMPLETED);
+
+        for (Object object: responseData)
+            policies.add(Policy.parseJson((JSONObject) object, application));
+
+        return policies;
     }
 }

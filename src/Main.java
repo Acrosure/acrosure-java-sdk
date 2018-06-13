@@ -1,12 +1,10 @@
-import com.acrosure.Acrosure;
-import com.acrosure.AcrosureException;
-import com.acrosure.Application;
-import com.acrosure.InsurancePackage;
+import com.acrosure.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -15,7 +13,8 @@ public class Main {
     public static void main(String[] args) {
         String json = "{\"policy_unit\":\"D\",\"insurer_list\":[],\"policy_date\":\"2018-06-20T07:16:00.071Z\","+
                 "\"expiry_date\":\"2018-06-30T07:16:02.461Z\",\"countries\":[\"UNITED ARAB EMIRATES\"]}";
-        Acrosure client = new Acrosure("tokn_sample_public");
+//        Acrosure client = new Acrosure("tokn_sample_public");
+        Acrosure client = new Acrosure("tokn_sample_secret");
 
         JSONObject obj = (JSONObject) JSONValue.parse(json);
 
@@ -23,7 +22,6 @@ public class Main {
             Application app = client.applications().create("prod_ta", obj);
             System.out.println("After creating application...");
             System.out.println(app);
-//            System.out.println(app.data().toJSONString());
 
             ((JSONArray) app.data().get("insurer_list")).add(JSONValue.parse(
                     "{\"card_type\":\"I\",\"first_name\":\"SRIKOTE \",\"last_name\":\"NAEWCHAMPA\"," +
@@ -42,12 +40,10 @@ public class Main {
             client.applications().update(app);
             System.out.println("\nAfter updating application...");
             System.out.println(app);
-//            System.out.println(app.data().toJSONString());
 
             Application app2 = client.applications().get(app.getId());
             System.out.println("\nAfter getting application...");
             System.out.println(app2);
-//            System.out.println(app2.data().toJSONString());
 
             ArrayList<InsurancePackage> insurancePackages = client.applications().getPackages(app.getId());
             System.out.println("\nAfter getting packages...");
@@ -57,7 +53,11 @@ public class Main {
             client.applications().update(app2);
             System.out.println("\nAfter updating application(2)...");
             System.out.println(app2);
-        } catch (IOException e) {
+
+            ArrayList<Policy> policies = client.applications().confirm(app2);
+            System.out.println("\nAfter confirming application...");
+            System.out.println(policies);
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         } catch (AcrosureException e) {
             System.out.println(e.getMessage() + ", " + e.getStatusCode());

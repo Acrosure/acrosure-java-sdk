@@ -21,14 +21,6 @@ public class Application {
         this(productId, id, obj, ApplicationStatus.INITIAL);
     }
 
-    Application(JSONObject obj) {
-        this(
-                (String) obj.get("product_id"),
-                (String) obj.get("id"),
-                (JSONObject) obj.get("form_data"),
-                ApplicationStatus.valueOf((String) obj.get("status")));
-    }
-
     public JSONObject data() {
         return data;
     }
