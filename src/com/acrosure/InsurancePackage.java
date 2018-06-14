@@ -46,4 +46,22 @@ public class InsurancePackage {
     public String getName() {
         return name;
     }
+
+    public enum Fields {
+        INSURER_PACKAGE_CODE("insurer_package_code"),
+        NAME("name"),
+        AMOUNT("amount"),
+        AMOUNT_WITH_TAX("amount_with_tax");
+
+        private final String field;
+
+        Fields(String field) {
+            this.field = field;
+        }
+
+        @Override
+        public String toString() {
+            return field;
+        }
+    }
 }
