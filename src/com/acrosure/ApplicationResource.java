@@ -51,7 +51,7 @@ public class ApplicationResource {
         JSONObject requestPayload = new JSONObject(), responseData;
 
         requestPayload.put(Application.Fields.PRODUCT_ID.toString(), productId);
-        requestPayload.put(Application.Fields.DATA.toString(), data);
+        requestPayload.put(Application.Fields.FORM_DATA.toString(), data);
 
         responseData = (JSONObject) httpClient.call(Methods.CREATE.toString(), METHOD_GROUP, requestPayload);
 
@@ -64,7 +64,7 @@ public class ApplicationResource {
         InsurancePackage insurancePackage = application.getPackageData();
 
         requestPayload.put(Application.Fields.APPLICATION_ID.toString(), application.getId());
-        requestPayload.put(Application.Fields.DATA.toString(), application.data());
+        requestPayload.put(Application.Fields.FORM_DATA.toString(), application.data());
 
         if (insurancePackage != null) {
             requestPayload.put(Application.Fields.INSURER_PACKAGE_CODE.toString(),

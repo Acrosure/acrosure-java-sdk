@@ -79,7 +79,7 @@ public class Application {
 
         return new Application(
                 (String) jsonObject.get(Fields.ID.toString()),
-                (JSONObject) jsonObject.get(Fields.DATA.toString()),
+                (JSONObject) jsonObject.get(Fields.FORM_DATA.toString()),
                 ApplicationStatus.valueOf((String) jsonObject.get(Fields.STATUS.toString())),
                 ApplicationSource.valueOf((String) jsonObject.get(Fields.SOURCE.toString())),
                 (String) jsonObject.get(Fields.LANGUAGE.toString()),
@@ -155,7 +155,7 @@ public class Application {
     public enum Fields {
         ID("id"),
         APPLICATION_ID("application_id"),
-        DATA("form_data"),
+        FORM_DATA("form_data"),
         STATUS("status"),
         AMOUNT("amount"),
         AMOUNT_WITH_TAX("amount_with_tax"),

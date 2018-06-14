@@ -187,42 +187,44 @@ public class Policy {
         return signedPolicyUrl;
     }
 
-    static Policy parseJson(JSONObject jsonObject, Application application) throws ParseException, MalformedURLException {
+    static Policy parseJson(JSONObject jsonObject, Application application)
+            throws ParseException, MalformedURLException, AcrosureException {
         SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss");
-        String insurerPolicyUrl = (String) jsonObject.get("insurer_policy_url");
-        String policyUrl = (String) jsonObject.get("policy_url");
-        String signedPolicyUrl = (String) jsonObject.get("signed_policy_url");
+        String insurerPolicyUrl = (String) jsonObject.get(Fields.INSURER_POLICY_URL.toString());
+        String policyUrl = (String) jsonObject.get(Fields.POLICY_URL.toString());
+        String signedPolicyUrl = (String) jsonObject.get(Fields.SIGNED_POLICY_URL.toString());
+        String applicationId = (String) jsonObject.get(Fields.APPLICATION_ID.toString());
 
-        if (!application.getId().equals(jsonObject.get("application_id"))) {
-            // @TODO Should I raise an error?
-            return null;
+        if (!application.getId().equals(applicationId)) {
+            throw new AcrosureException(
+                    "Unexpected application ID: " + applicationId + ". Expected " + application.getId(), 500);
         }
 
         return new Policy(
-                (String) jsonObject.get("id"),
-                dateFormat.parse((String) jsonObject.get("effective_date")),
-                dateFormat.parse((String) jsonObject.get("expiry_date")),
-                (String) jsonObject.get("insurer_policy_code"),
+                (String) jsonObject.get(Fields.ID.toString()),
+                dateFormat.parse((String) jsonObject.get(Fields.EFFECTIVE_DATE.toString())),
+                dateFormat.parse((String) jsonObject.get(Fields.EXPIRY_DATE.toString())),
+                (String) jsonObject.get(Fields.INSURER_POLICY_CODE.toString()),
                 insurerPolicyUrl.equals("") ? null : new URL(insurerPolicyUrl),
                 policyUrl.equals("") ? null : new URL(policyUrl),
-                (Double) jsonObject.get("amount"),
-                (Long) jsonObject.get("amount_with_tax"),
-                PolicyStatus.valueOf((String) jsonObject.get("status")),
-                (String) jsonObject.get("insurer_id"),
-                (String) jsonObject.get("first_name"),
-                (String) jsonObject.get("last_name"),
-                (String) jsonObject.get("email"),
-                (String) jsonObject.get("telephone"),
-                dateFormat.parse((String) jsonObject.get("download_at")),
-                dateFormat.parse((String) jsonObject.get("created_at")),
+                (Double) jsonObject.get(Fields.AMOUNT.toString()),
+                (Long) jsonObject.get(Fields.AMOUNT_WITH_TAX.toString()),
+                PolicyStatus.valueOf((String) jsonObject.get(Fields.STATUS.toString())),
+                (String) jsonObject.get(Fields.INSURER_ID.toString()),
+                (String) jsonObject.get(Fields.FIRST_NAME.toString()),
+                (String) jsonObject.get(Fields.LAST_NAME.toString()),
+                (String) jsonObject.get(Fields.EMAIL.toString()),
+                (String) jsonObject.get(Fields.TELEPHONE.toString()),
+                dateFormat.parse((String) jsonObject.get(Fields.DOWNLOAD_AT.toString())),
+                dateFormat.parse((String) jsonObject.get(Fields.CREATED_AT.toString())),
                 application,
-                (String) jsonObject.get("team_id"),
-                (String) jsonObject.get("user_id"),
-                (JSONObject) jsonObject.get("form_data"),
-                (String) jsonObject.get("source"),
-                (String) jsonObject.get("insurer_package_code"),
-                (String) jsonObject.get("error_message"),
-                (String) jsonObject.get("team_name"),
+                (String) jsonObject.get(Fields.TEAM_ID.toString()),
+                (String) jsonObject.get(Fields.USER_ID.toString()),
+                (JSONObject) jsonObject.get(Fields.FORM_DATA.toString()),
+                (String) jsonObject.get(Fields.SOURCE.toString()),
+                (String) jsonObject.get(Fields.INSURER_PACKAGE_CODE),
+                (String) jsonObject.get(Fields.ERROR_MESSAGE.toString()),
+                (String) jsonObject.get(Fields.TEAM_NAME),
                 signedPolicyUrl.equals("") ? null : new URL(signedPolicyUrl));
     }
 
@@ -237,5 +239,44 @@ public class Policy {
                 ", status='" + status + '\'' +
                 ", application=" + application +
                 '}';
+    }
+
+    public enum Fields {
+        ID("id"),
+        EFFECTIVE_DATE("effective_date"),
+        EXPIRY_DATE("expiry_date"),
+        INSURER_POLICY_CODE("insurer_policy_code"),
+        INSURER_POLICY_URL("insurer_policy_url"),
+        POLICY_URL("policy_url"),
+        AMOUNT("amount"),
+        AMOUNT_WITH_TAX("amount_with_tax"),
+        STATUS("status"),
+        INSURER_ID("insurer_id"),
+        FIRST_NAME("first_name"),
+        LAST_NAME("last_name"),
+        EMAIL("email"),
+        TELEPHONE("telephone"),
+        DOWNLOAD_AT("download_at"),
+        CREATED_AT("created_at"),
+        TEAM_ID("team_id"),
+        USER_ID("user_id"),
+        FORM_DATA("form_data"),
+        SOURCE("source"),
+        INSURER_PACKAGE_CODE("insurer_package_code"),
+        ERROR_MESSAGE("error_message"),
+        TEAM_NAME("team_name"),
+        SIGNED_POLICY_URL("signed_policy_url"),
+        APPLICATION_ID("application_id");
+
+        private final String field;
+
+        Fields(String field) {
+            this.field = field;
+        }
+
+        @Override
+        public String toString() {
+            return field;
+        }
     }
 }
