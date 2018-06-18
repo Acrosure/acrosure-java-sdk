@@ -237,7 +237,7 @@ public class Policy {
                 ", amount=" + amount +
                 ", amountWithTax=" + amountWithTax +
                 ", status='" + status + '\'' +
-                ", application=" + application +
+                ", application=" + application.getId() +
                 '}';
     }
 

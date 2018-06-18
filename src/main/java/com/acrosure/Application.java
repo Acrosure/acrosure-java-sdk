@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Application {
@@ -23,7 +24,7 @@ public class Application {
 //    private String productCode;
 //    private String[] errorFields;
 //    private String errorMessage;
-//    private String[] policyIds;
+    private ArrayList<Policy> policies;
 
     Application(
             String id,
@@ -47,6 +48,7 @@ public class Application {
         this.userId = userId;
         this.teamId = teamId;
         packageData = null;
+        policies = null;
     }
 
     Application(
@@ -72,6 +74,10 @@ public class Application {
 
     void setInsurerApplicationNo(String insurerApplicationNo) {
         this.insurerApplicationNo = insurerApplicationNo;
+    }
+
+    void setPolicies(ArrayList<Policy> policies) {
+        this.policies = policies;
     }
 
     static Application parseJson(JSONObject jsonObject) throws ParseException {
@@ -149,6 +155,7 @@ public class Application {
                 ", id='" + id + '\'' +
                 ", status=" + status +
                 ", packageData=" + packageData +
+                ", policies=" + policies +
                 '}';
     }
 

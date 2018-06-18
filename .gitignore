@@ -1,5 +1,6 @@
-lib/
 out/
 .idea/
+.gradle/
+gradle/
 !.gitignore
 *~

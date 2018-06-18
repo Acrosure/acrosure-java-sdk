@@ -1,4 +1,6 @@
 import com.acrosure.*;
+import com.acrosure.Application;
+import com.acrosure.InsurancePackage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -54,9 +56,10 @@ public class Main {
             System.out.println("\nAfter updating application(2)...");
             System.out.println(app2);
 
-            ArrayList<Policy> policies = client.applications().confirm(app2);
-            System.out.println("\nAfter confirming application...");
-            System.out.println(policies);
+//            ArrayList<Policy> policies = client.applications().confirm(app2);
+//            System.out.println("\nAfter confirming application...");
+//            System.out.println(policies);
+//            System.out.println(app2);
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         } catch (AcrosureException e) {

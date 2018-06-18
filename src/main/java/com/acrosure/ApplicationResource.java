@@ -96,6 +96,8 @@ public class ApplicationResource {
         for (Object object: responseData)
             policies.add(Policy.parseJson((JSONObject) object, application));
 
+        application.setPolicies(policies);
+
         return policies;
     }
 
