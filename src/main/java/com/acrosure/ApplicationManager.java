@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-public class ApplicationResource {
-    private final HttpClient httpClient;
+public class ApplicationManager {
+    private final IHttpClient httpClient;
     private final String METHOD_GROUP;
 
-    ApplicationResource(HttpClient httpClient) {
+    ApplicationManager(IHttpClient httpClient) {
         this.httpClient = httpClient;
         METHOD_GROUP = "applications";
     }

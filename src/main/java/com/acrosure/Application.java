@@ -80,20 +80,24 @@ public class Application {
         this.policies = policies;
     }
 
-    static Application parseJson(JSONObject jsonObject) throws ParseException {
+    static Application parseJson(JSONObject jsonObject) throws ParseException, AcrosureException {
         SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss");
 
-        return new Application(
-                (String) jsonObject.get(Fields.ID.toString()),
-                (JSONObject) jsonObject.get(Fields.FORM_DATA.toString()),
-                ApplicationStatus.valueOf((String) jsonObject.get(Fields.STATUS.toString())),
-                ApplicationSource.valueOf((String) jsonObject.get(Fields.SOURCE.toString())),
-                (String) jsonObject.get(Fields.LANGUAGE.toString()),
-                dateFormat.parse((String) jsonObject.get(Fields.CREATED_AT.toString())),
-                dateFormat.parse((String) jsonObject.get(Fields.UPDATED_AT.toString())),
-                (String) jsonObject.get(Fields.PRODUCT_ID.toString()),
-                (String) jsonObject.get(Fields.USER_ID.toString()),
-                (String) jsonObject.get(Fields.TEAM_ID.toString()));
+        try {
+            return new Application(
+                    (String) jsonObject.get(Fields.ID.toString()),
+                    (JSONObject) jsonObject.get(Fields.FORM_DATA.toString()),
+                    ApplicationStatus.valueOf((String) jsonObject.get(Fields.STATUS.toString())),
+                    ApplicationSource.valueOf((String) jsonObject.get(Fields.SOURCE.toString())),
+                    (String) jsonObject.get(Fields.LANGUAGE.toString()),
+                    dateFormat.parse((String) jsonObject.get(Fields.CREATED_AT.toString())),
+                    dateFormat.parse((String) jsonObject.get(Fields.UPDATED_AT.toString())),
+                    (String) jsonObject.get(Fields.PRODUCT_ID.toString()),
+                    (String) jsonObject.get(Fields.USER_ID.toString()),
+                    (String) jsonObject.get(Fields.TEAM_ID.toString()));
+        } catch (NullPointerException e) {
+            throw new AcrosureException("Malformed responded JSON", 1);
+        }
     }
 
     public String getId() {

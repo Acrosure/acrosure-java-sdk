@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-public class HttpClient {
+public class HttpClient implements IHttpClient {
     private final String token;
     private final String HOST;
     private final CloseableHttpClient httpClient;
@@ -30,7 +30,8 @@ public class HttpClient {
         HOST = "https://api.phantompage.com";
     }
 
-    JSONAware call(String method, String methodGroup, JSONObject param) throws IOException, AcrosureException {
+    @Override
+    public JSONAware call(String method, String methodGroup, JSONObject param) throws IOException, AcrosureException {
         JSONObject apiResponse;
         HttpRequestBase httpRequest = buildHttpRequest(method, methodGroup, param);
 
