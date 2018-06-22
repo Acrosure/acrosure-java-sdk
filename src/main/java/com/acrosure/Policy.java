@@ -195,9 +195,9 @@ public class Policy {
         String signedPolicyUrl = (String) jsonObject.get(Fields.SIGNED_POLICY_URL.toString());
         String applicationId = (String) jsonObject.get(Fields.APPLICATION_ID.toString());
 
-        if (!application.getId().equals(applicationId)) {
+        if (!application.id().equals(applicationId)) {
             throw new AcrosureException(
-                    "Unexpected application ID: " + applicationId + ". Expected " + application.getId(), 500);
+                    "Unexpected application ID: " + applicationId + ". Expected " + application.id(), 500);
         }
 
         return new Policy(
@@ -237,7 +237,7 @@ public class Policy {
                 ", amount=" + amount +
                 ", amountWithTax=" + amountWithTax +
                 ", status='" + status + '\'' +
-                ", application=" + application.getId() +
+                ", application=" + application.id() +
                 '}';
     }
 

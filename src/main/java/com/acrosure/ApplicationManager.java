@@ -33,15 +33,8 @@ public class ApplicationManager {
         requestPayload.put(Application.Fields.APPLICATION_ID.toString(), applicationId);
         responseData = (JSONArray) httpClient.call(Methods.GET_PACKAGES.toString(), METHOD_GROUP, requestPayload);
 
-        for (Object object: responseData) {
-            JSONObject jsonObject = (JSONObject) object;
-            insurancePackages.add(new InsurancePackage(
-                    (String) jsonObject.get(InsurancePackage.Fields.INSURER_PACKAGE_CODE.toString()),
-                    (String) jsonObject.get(InsurancePackage.Fields.NAME.toString()),
-                    (Double) jsonObject.get(InsurancePackage.Fields.AMOUNT.toString()),
-                    (Long) jsonObject.get(InsurancePackage.Fields.AMOUNT_WITH_TAX.toString()),
-                    jsonObject));
-        }
+        for (Object object: responseData)
+            insurancePackages.add(InsurancePackage.parseJson((JSONObject) object));
 
         return insurancePackages;
     }
@@ -59,27 +52,26 @@ public class ApplicationManager {
     }
 
     public Application update(Application application) throws IOException, AcrosureException, ParseException {
-        Application returnedApplication;
         JSONObject requestPayload = new JSONObject(), responseData;
-        InsurancePackage insurancePackage = application.getPackageData();
+        Application applicationTemp;
 
-        requestPayload.put(Application.Fields.APPLICATION_ID.toString(), application.getId());
+        requestPayload.put(Application.Fields.APPLICATION_ID.toString(), application.id());
         requestPayload.put(Application.Fields.FORM_DATA.toString(), application.data());
-
-        if (insurancePackage != null) {
-            requestPayload.put(Application.Fields.INSURER_PACKAGE_CODE.toString(),
-                    insurancePackage.getInsurerPackageCode());
-            requestPayload.put(Application.Fields.INSURER_PACKAGE_NAME.toString(),insurancePackage.getName());
-            requestPayload.put(Application.Fields.INSURER_APPLICATION_NO.toString(),
-                    application.getInsurerApplicationNo());
-            requestPayload.put(Application.Fields.AMOUNT.toString(), insurancePackage.getAmount());
-            requestPayload.put(Application.Fields.AMOUNT_WITH_TAX.toString(), insurancePackage.getAmountWithTax());
-        }
+        requestPayload.put(Application.Fields.INSURER_PACKAGE_CODE.toString(), application.insurerPackageCode());
+        requestPayload.put(Application.Fields.INSURER_PACKAGE_NAME.toString(), application.insurerPackageName());
+        requestPayload.put(Application.Fields.AMOUNT.toString(), application.amount());
+        requestPayload.put(Application.Fields.AMOUNT_WITH_TAX.toString(), application.amountWithTax());
+        requestPayload.put(Application.Fields.REF1.toString(), application.reference(1));
+        requestPayload.put(Application.Fields.REF2.toString(), application.reference(2));
+        requestPayload.put(Application.Fields.REF3.toString(), application.reference(3));
 
         responseData = (JSONObject) httpClient.call(Methods.UPDATE.toString(), METHOD_GROUP, requestPayload);
-        returnedApplication = Application.parseJson(responseData);
-        application.setStatus(returnedApplication.getStatus());
-        application.setUpdatedAt(returnedApplication.getUpdatedAt());
+        applicationTemp = Application.parseJson(responseData);
+
+        application.setStatus(applicationTemp.status());
+        application.setUpdatedAt(applicationTemp.updatedAt());
+        application.setErrorFields(applicationTemp.errorFields());
+        application.setErrorMessage(applicationTemp.errorMessage());
 
         return application;
     }
@@ -88,15 +80,21 @@ public class ApplicationManager {
         JSONObject requestPayload = new JSONObject();
         JSONArray responseData;
         ArrayList<Policy> policies = new ArrayList<>();
+        Application applicationTemp;
 
-        requestPayload.put(Application.Fields.APPLICATION_ID.toString(), application.getId());
+        requestPayload.put(Application.Fields.APPLICATION_ID.toString(), application.id());
         responseData = (JSONArray) httpClient.call(Methods.CONFIRM.toString(), METHOD_GROUP, requestPayload);
         application.setStatus(ApplicationStatus.COMPLETED);
 
         for (Object object: responseData)
             policies.add(Policy.parseJson((JSONObject) object, application));
 
-        application.setPolicies(policies);
+        applicationTemp = get(application.id());
+
+        application.setStatus(applicationTemp.status());
+        application.setInsurerApplicationNo(applicationTemp.insurerApplicationNo());
+        application.setUpdatedAt(applicationTemp.updatedAt());
+        application.setPolicyIds(applicationTemp.policyIds());
 
         return policies;
     }

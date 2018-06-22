@@ -43,23 +43,23 @@ public class Main {
             System.out.println("\nAfter updating application...");
             System.out.println(app);
 
-            Application app2 = client.applications().get(app.getId());
+            Application app2 = client.applications().get(app.id());
             System.out.println("\nAfter getting application...");
             System.out.println(app2);
 
-            ArrayList<InsurancePackage> insurancePackages = client.applications().getPackages(app.getId());
+            ArrayList<InsurancePackage> insurancePackages = client.applications().getPackages(app.id());
             System.out.println("\nAfter getting packages...");
             System.out.println(insurancePackages);
 
-            app2.setPackage(insurancePackages.get(1));
-            client.applications().update(app2);
-            System.out.println("\nAfter updating application(2)...");
-            System.out.println(app2);
+            app.setPackage(insurancePackages.get(1));
+            client.applications().update(app);
+            System.out.println("\nAfter updating application...");
+            System.out.println(app);
 
-            ArrayList<Policy> policies = client.applications().confirm(app2);
+            ArrayList<Policy> policies = client.applications().confirm(app);
             System.out.println("\nAfter confirming application...");
             System.out.println(policies);
-            System.out.println(app2);
+            System.out.println(app);
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         } catch (AcrosureException e) {

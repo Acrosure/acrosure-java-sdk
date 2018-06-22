@@ -8,8 +8,6 @@ import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -28,7 +26,7 @@ class ApplicationManagerTest {
             e.printStackTrace();
         }
 
-        assertThat(application.getId(), containsString("sandbox_appl_Cga9GqjAAoC8aLwp"));
+        assertThat(application.id(), containsString("sandbox_appl_Cga9GqjAAoC8aLwp"));
     }
 
     @Test
@@ -43,7 +41,7 @@ class ApplicationManagerTest {
     }
 
     @Test
-    void get_poorNetworkWithValidApplicationId_throwsIOException() {
+    void get_poorNetwork_throwsIOException() {
         Throwable exception = assertThrows(IOException.class, () -> {
             IHttpClient httpClient = new FakeHttpClient(Scenario.NETWORK_ERROR);
             ApplicationManager manager = new ApplicationManager(httpClient);
