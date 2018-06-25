@@ -1,6 +1,6 @@
 package com.acrosure;
 
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 public class InsurancePackage {
     private final String insurerPackageCode;
@@ -31,12 +31,12 @@ public class InsurancePackage {
     static InsurancePackage parseJson(JSONObject jsonObject) throws AcrosureException {
         try {
             return new InsurancePackage(
-                    (String) jsonObject.get(Fields.INSURER_PACKAGE_CODE.toString()),
-                    (String) jsonObject.get(Fields.NAME.toString()),
-                    ((Number) jsonObject.get(Application.Fields.AMOUNT.toString())).doubleValue(),
-                    ((Number) jsonObject.get(Application.Fields.AMOUNT_WITH_TAX.toString())).doubleValue(),
-                    ((Number) jsonObject.get(Fields.AMOUNT_PER_UNIT.toString())).doubleValue(),
-                    ((Number) jsonObject.get(Fields.AMOUNT_WITH_TAX_PER_UNIT.toString())).doubleValue(),
+                    jsonObject.getString(Fields.INSURER_PACKAGE_CODE.toString()),
+                    jsonObject.getString(Fields.NAME.toString()),
+                    jsonObject.getDouble(Application.Fields.AMOUNT.toString()),
+                    jsonObject.getDouble(Application.Fields.AMOUNT_WITH_TAX.toString()),
+                    jsonObject.getDouble(Fields.AMOUNT_PER_UNIT.toString()),
+                    jsonObject.getDouble(Fields.AMOUNT_WITH_TAX_PER_UNIT.toString()),
                     jsonObject);
         } catch (NullPointerException e) {
             throw new AcrosureException("Malformed responded JSON", 1);

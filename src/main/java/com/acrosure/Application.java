@@ -1,7 +1,8 @@
 package com.acrosure;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -102,48 +103,49 @@ public class Application {
         ArrayList<String> errorFields, policyIds;
         String[] references = new String[3];
 
-        // temp objects
-        JSONArray errorFieldsTemp = (JSONArray) jsonObject.get(Fields.ERROR_FIELDS.toString());
-        JSONArray policyIdsTemp = (JSONArray) jsonObject.get(Fields.POLICY_IDS.toString());
-
         errorFields = policyIds = new ArrayList<>();
 
-        references[0] = (String) jsonObject.get(Fields.REF1.toString());
-        references[1] = (String) jsonObject.get(Fields.REF2.toString());
-        references[2] = (String) jsonObject.get(Fields.REF3.toString());
-
-        if (errorFieldsTemp != null) {
-            for (Object field: errorFieldsTemp)
-                errorFields.add((String) field);
-        }
-
-        if (policyIdsTemp != null) {
-            for (Object policyId: policyIdsTemp)
-                policyIds.add((String) policyId);
-        }
-
         try {
+
+            // temp objects
+            Object errorFieldsTemp = jsonObject.get(Fields.ERROR_FIELDS.toString());
+            Object policyIdsTemp = jsonObject.get(Fields.POLICY_IDS.toString());
+
+            if (errorFieldsTemp instanceof JSONArray) {
+                for (Object field: (JSONArray) errorFieldsTemp)
+                    errorFields.add((String) field);
+            }
+
+            if (policyIdsTemp instanceof JSONArray) {
+                for (Object policyId: (JSONArray) policyIdsTemp)
+                    policyIds.add((String) policyId);
+            }
+
+            references[0] = jsonObject.getString(Fields.REF1.toString());
+            references[1] = jsonObject.getString(Fields.REF2.toString());
+            references[2] = jsonObject.getString(Fields.REF3.toString());
+
             return new Application(
-                    (String) jsonObject.get(Fields.ID.toString()),
-                    (JSONObject) jsonObject.get(Fields.FORM_DATA.toString()),
-                    ApplicationStatus.valueOf((String) jsonObject.get(Fields.STATUS.toString())),
-                    ((Number) jsonObject.get(Fields.AMOUNT.toString())).doubleValue(),
-                    ((Number) jsonObject.get(Fields.AMOUNT_WITH_TAX.toString())).doubleValue(),
-                    ApplicationSource.valueOf((String) jsonObject.get(Fields.SOURCE.toString())),
+                    jsonObject.getString(Fields.ID.toString()),
+                    jsonObject.getJSONObject(Fields.FORM_DATA.toString()),
+                    ApplicationStatus.valueOf(jsonObject.getString(Fields.STATUS.toString())),
+                    jsonObject.getDouble(Fields.AMOUNT.toString()),
+                    jsonObject.getDouble(Fields.AMOUNT_WITH_TAX.toString()),
+                    ApplicationSource.valueOf(jsonObject.getString(Fields.SOURCE.toString())),
                     references,
-                    (String) jsonObject.get(Fields.INSURER_PACKAGE_CODE.toString()),
-                    (String) jsonObject.get(Fields.INSURER_PACKAGE_NAME.toString()),
-                    (String) jsonObject.get(Fields.INSURER_APPLICATION_NO.toString()),
-                    (String) jsonObject.get(Fields.LANGUAGE.toString()),
-                    dateFormat.parse((String) jsonObject.get(Fields.CREATED_AT.toString())),
-                    dateFormat.parse((String) jsonObject.get(Fields.UPDATED_AT.toString())),
-                    (String) jsonObject.get(Fields.PRODUCT_ID.toString()),
-                    (String) jsonObject.get(Fields.USER_ID.toString()),
-                    (String) jsonObject.get(Fields.TEAM_ID.toString()),
+                    jsonObject.getString(Fields.INSURER_PACKAGE_CODE.toString()),
+                    jsonObject.getString(Fields.INSURER_PACKAGE_NAME.toString()),
+                    jsonObject.getString(Fields.INSURER_APPLICATION_NO.toString()),
+                    jsonObject.getString(Fields.LANGUAGE.toString()),
+                    dateFormat.parse(jsonObject.getString(Fields.CREATED_AT.toString())),
+                    dateFormat.parse(jsonObject.getString(Fields.UPDATED_AT.toString())),
+                    jsonObject.getString(Fields.PRODUCT_ID.toString()),
+                    jsonObject.getString(Fields.USER_ID.toString()),
+                    jsonObject.getString(Fields.TEAM_ID.toString()),
                     errorFields,
-                    (String) jsonObject.get(Fields.ERROR_MESSAGE.toString()),
+                    jsonObject.getString(Fields.ERROR_MESSAGE.toString()),
                     policyIds);
-        } catch (NullPointerException e) {
+        } catch (JSONException e) {
             throw new AcrosureException("Malformed responded JSON", 1);
         }
     }

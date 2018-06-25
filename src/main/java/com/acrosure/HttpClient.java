@@ -10,9 +10,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.json.simple.JSONAware;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,7 +29,7 @@ public class HttpClient implements IHttpClient {
     }
 
     @Override
-    public JSONAware call(String method, String methodGroup, JSONObject param) throws IOException, AcrosureException {
+    public Object call(String method, String methodGroup, JSONObject param) throws IOException, AcrosureException {
         JSONObject apiResponse;
         HttpRequestBase httpRequest = buildHttpRequest(method, methodGroup, param);
 
@@ -51,16 +49,16 @@ public class HttpClient implements IHttpClient {
                 if (apiResponse == null)
                     throw new AcrosureException(statusLine.getReasonPhrase(), statusCode);
                 else
-                    throw new AcrosureException((String) apiResponse.get("message"), statusCode);
+                    throw new AcrosureException((String) apiResponse.getString("message"), statusCode);
             }
         }
 
-        return (JSONAware) apiResponse.get("data");
+        return apiResponse.get("data");
     }
 
     private HttpRequestBase buildHttpRequest(String method, String methodGroup, JSONObject param) {
         StringEntity entity = new StringEntity(
-                param.toJSONString(),
+                param.toString(),
                 ContentType.create("application/json", "UTF-8"));
         HttpPost httpPost = new HttpPost(HOST + "/" + methodGroup + "/" + method);
 
@@ -76,7 +74,7 @@ public class HttpClient implements IHttpClient {
         while (content.ready())
             jsonString.append(content.readLine());
 
-        JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonString.toString());
+        JSONObject jsonObject = new JSONObject(jsonString.toString());
 
         return jsonObject;
     }

@@ -1,13 +1,13 @@
 import com.acrosure.*;
 import com.acrosure.Application;
 import com.acrosure.InsurancePackage;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Main {
@@ -18,14 +18,14 @@ public class Main {
 //        Acrosure client = new Acrosure("tokn_sample_public");
         Acrosure client = new Acrosure("tokn_sample_secret");
 
-        JSONObject obj = (JSONObject) JSONValue.parse(json);
+        JSONObject obj = new JSONObject(json);
 
         try {
             Application app = client.applications().create("prod_ta", obj);
             System.out.println("After creating application...");
             System.out.println(app);
 
-            ((JSONArray) app.data().get("insurer_list")).add(JSONValue.parse(
+            app.data().getJSONArray("insurer_list").put(new JSONObject(
                     "{\"card_type\":\"I\",\"first_name\":\"SRIKOTE \",\"last_name\":\"NAEWCHAMPA\"," +
                             "\"address\":{\"address_no\":\"315\",\"moo\":\"11\",\"village\":\"\",\"lane\":\"\"," +
                             "\"street\":\"KLANG AWUT\",\"postal_code\":\"34000\",\"province\":\"Ubon Ratchathani\"," +
@@ -33,11 +33,16 @@ public class Main {
                             "\"id_card\":\"1349900696510\",\"birthdate\":\"1995-04-05T07:18:44.543Z\"," +
                             "\"email\":\"srikote@kmi.tl\",\"phone\":\"0868702109\",\"nominee\":null}"));
 
-            app.data().putAll((Map) JSONValue.parse(
+            JSONObject appending = new JSONObject(
                     "{\"customer_title\":\"MR.\",\"customer_first_name\":\"SRIKOTE \"," +
                             "\"customer_last_name\":\"NAEWCHAMPA\",\"card_type\":\"I\"," +
                             "\"id_card\":\"1349900696510\",\"email\":\"srikote@kmi.tl\",\"phone\":\"0868702109\"," +
-                            "\"company_name\":\"SRIKOTE \"}"));
+                            "\"company_name\":\"SRIKOTE \"}");
+
+            for (Iterator<String> it = appending.keys(); it.hasNext(); ) {
+                String key = it.next();
+                app.data().put(key, appending.getString(key));
+            }
 
             client.applications().update(app);
             System.out.println("\nAfter updating application...");
