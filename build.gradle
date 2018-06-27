@@ -13,8 +13,7 @@ repositories {
 
 dependencies {
     compile(
-            [group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5'],
-            [group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.9'],
+            [group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.10.0'],
             [group: 'org.json', name: 'json', version: '20180130']
     )
     testCompile(
