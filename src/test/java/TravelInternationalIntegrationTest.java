@@ -1,16 +1,14 @@
 import com.acrosure.*;
 import com.acrosure.Application;
 import com.acrosure.InsurancePackage;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 
-public class Main {
+public class TravelInternationalIntegrationTest {
 
     public static void main(String[] args) {
         String json = "{\"policy_unit\":\"D\",\"insurer_list\":[],\"policy_date\":\"2018-06-20T07:16:00.071Z\","+

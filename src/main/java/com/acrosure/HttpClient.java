@@ -1,11 +1,14 @@
 package com.acrosure;
 
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.RequestBody;
+import okhttp3.MediaType;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class HttpClient implements IHttpClient {
     private final String token;
@@ -28,12 +31,8 @@ public class HttpClient implements IHttpClient {
         apiResponse = new JSONObject(response.body().string());
 
 
-        if (statusCode != 200) {
-            if (apiResponse == null)
-                throw new AcrosureException(response.message(), statusCode);
-            else
-                throw new AcrosureException(apiResponse.getString("message"), statusCode);
-        }
+        if (statusCode != 200)
+            throw new AcrosureException(apiResponse.getString("message"), statusCode);
 
         return apiResponse.get("data");
     }

@@ -26,7 +26,7 @@ public class Application {
     private final String productId;
     private String userId;
     private String teamId;
-    private ArrayList<String> errorFields;
+    private ArrayList<ErrorField> errorFields;
     private String errorMessage;
 
     private ArrayList<String> policyIds;
@@ -48,7 +48,7 @@ public class Application {
             String productId,
             String userId,
             String teamId,
-            ArrayList<String> errorFields,
+            ArrayList<ErrorField> errorFields,
             String errorMessage,
             ArrayList<String> policyIds) {
         this.id = id;
@@ -80,7 +80,7 @@ public class Application {
         this.updatedAt = updatedAt;
     }
 
-    void setErrorFields(ArrayList<String> errorFields) {
+    void setErrorFields(ArrayList<ErrorField> errorFields) {
         this.errorFields = errorFields;
     }
 
@@ -100,10 +100,9 @@ public class Application {
         SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss");
 
         // aggregated objects
-        ArrayList<String> errorFields, policyIds;
+        ArrayList<ErrorField> errorFields = new ArrayList<>();
+        ArrayList<String> policyIds = new ArrayList<>();
         String[] references = new String[3];
-
-        errorFields = policyIds = new ArrayList<>();
 
         try {
 
@@ -113,7 +112,7 @@ public class Application {
 
             if (errorFieldsTemp instanceof JSONArray) {
                 for (Object field: (JSONArray) errorFieldsTemp)
-                    errorFields.add((String) field);
+                    errorFields.add(ErrorField.parseJson((JSONObject) field));
             }
 
             if (policyIdsTemp instanceof JSONArray) {
@@ -214,7 +213,7 @@ public class Application {
         return teamId;
     }
 
-    public ArrayList<String> errorFields() {
+    public ArrayList<ErrorField> errorFields() {
         return errorFields;
     }
 
