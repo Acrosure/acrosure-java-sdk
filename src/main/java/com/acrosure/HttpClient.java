@@ -3,9 +3,7 @@ package com.acrosure;
 import okhttp3.*;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class HttpClient implements IHttpClient {
     private final String token;
@@ -13,9 +11,16 @@ public class HttpClient implements IHttpClient {
     private final OkHttpClient httpClient;
 
     HttpClient(String token) {
+        final String domain = "api.phantompage.com";
+        final String cert = "sha256/28zFYvyx23W0C+SWKQT8W+2CP/KSRbQ/aeyUxyvocaM=";
         this.token = token;
-        httpClient = new OkHttpClient.Builder().build();
-        HOST = "https://api.phantompage.com";
+        HOST = "https://" + domain;
+        httpClient = new OkHttpClient.Builder()
+                .certificatePinner(
+                        new CertificatePinner.Builder()
+                                .add(domain, cert)
+                                .build())
+                .build();
     }
 
     @Override
@@ -28,12 +33,8 @@ public class HttpClient implements IHttpClient {
         apiResponse = new JSONObject(response.body().string());
 
 
-        if (statusCode != 200) {
-            if (apiResponse == null)
-                throw new AcrosureException(response.message(), statusCode);
-            else
-                throw new AcrosureException(apiResponse.getString("message"), statusCode);
-        }
+        if (statusCode != 200)
+            throw new AcrosureException(apiResponse.getString("message"), statusCode);
 
         return apiResponse.get("data");
     }
