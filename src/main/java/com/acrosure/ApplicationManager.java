@@ -8,10 +8,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 public class ApplicationManager {
-    private final IHttpClient httpClient;
+    private final HttpClient httpClient;
     private final String METHOD_GROUP;
 
-    ApplicationManager(IHttpClient httpClient) {
+    ApplicationManager(HttpClient httpClient) {
         this.httpClient = httpClient;
         METHOD_GROUP = "applications";
     }
@@ -20,7 +20,7 @@ public class ApplicationManager {
         JSONObject requestPayload = new JSONObject(), responseData;
 
         requestPayload.put(Application.Fields.APPLICATION_ID.toString(), applicationId);
-        responseData = (JSONObject) httpClient.call(Methods.GET.toString(), METHOD_GROUP, requestPayload);
+        responseData = (JSONObject) httpClient.call(METHOD_GROUP, Methods.GET.toString(), requestPayload);
 
         return Application.parseJson(responseData);
     }
@@ -31,7 +31,7 @@ public class ApplicationManager {
         ArrayList<InsurancePackage> insurancePackages = new ArrayList<>();
 
         requestPayload.put(Application.Fields.APPLICATION_ID.toString(), applicationId);
-        responseData = (JSONArray) httpClient.call(Methods.GET_PACKAGES.toString(), METHOD_GROUP, requestPayload);
+        responseData = (JSONArray) httpClient.call(METHOD_GROUP, Methods.GET_PACKAGES.toString(), requestPayload);
 
         for (Object object: responseData)
             insurancePackages.add(InsurancePackage.parseJson((JSONObject) object));
@@ -46,7 +46,7 @@ public class ApplicationManager {
         requestPayload.put(Application.Fields.PRODUCT_ID.toString(), productId);
         requestPayload.put(Application.Fields.FORM_DATA.toString(), data);
 
-        responseData = (JSONObject) httpClient.call(Methods.CREATE.toString(), METHOD_GROUP, requestPayload);
+        responseData = (JSONObject) httpClient.call(METHOD_GROUP, Methods.CREATE.toString(), requestPayload);
 
         return Application.parseJson(responseData);
     }
@@ -65,7 +65,7 @@ public class ApplicationManager {
         requestPayload.put(Application.Fields.REF2.toString(), application.reference(2));
         requestPayload.put(Application.Fields.REF3.toString(), application.reference(3));
 
-        responseData = (JSONObject) httpClient.call(Methods.UPDATE.toString(), METHOD_GROUP, requestPayload);
+        responseData = (JSONObject) httpClient.call(METHOD_GROUP, Methods.UPDATE.toString(), requestPayload);
         applicationTemp = Application.parseJson(responseData);
 
         application.setStatus(applicationTemp.status());
@@ -83,7 +83,7 @@ public class ApplicationManager {
         Application applicationTemp;
 
         requestPayload.put(Application.Fields.APPLICATION_ID.toString(), application.id());
-        responseData = (JSONArray) httpClient.call(Methods.CONFIRM.toString(), METHOD_GROUP, requestPayload);
+        responseData = (JSONArray) httpClient.call(METHOD_GROUP, Methods.CONFIRM.toString(), requestPayload);
         application.setStatus(ApplicationStatus.COMPLETED);
 
         for (Object object: responseData)

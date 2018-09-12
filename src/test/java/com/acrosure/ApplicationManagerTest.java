@@ -14,7 +14,7 @@ class ApplicationManagerTest {
 
     @Test
     void get_goodNetworkWithValidApplicationId_returnsJSONAware() {
-        IHttpClient httpClient = new FakeHttpClient(Scenario.NETWORK_OK);
+        HttpClient httpClient = new FakeHttpClient(Scenario.NETWORK_OK);
         ApplicationManager manager = new ApplicationManager(httpClient);
         Application application = null;
 
@@ -29,7 +29,7 @@ class ApplicationManagerTest {
 
     @Test
     void get_goodNetworkWithInvalidApplicationId_throwsAcrosureException() {
-        IHttpClient httpClient = new FakeHttpClient(Scenario.NETWORK_OK);
+        HttpClient httpClient = new FakeHttpClient(Scenario.NETWORK_OK);
         Throwable exception = assertThrows(AcrosureException.class, () -> {
             ApplicationManager manager = new ApplicationManager(httpClient);
             manager.get("invalid_application_id");
@@ -41,7 +41,7 @@ class ApplicationManagerTest {
     @Test
     void get_poorNetwork_throwsIOException() {
         Throwable exception = assertThrows(IOException.class, () -> {
-            IHttpClient httpClient = new FakeHttpClient(Scenario.NETWORK_ERROR);
+            HttpClient httpClient = new FakeHttpClient(Scenario.NETWORK_ERROR);
             ApplicationManager manager = new ApplicationManager(httpClient);
             manager.get("sandbox_appl_Cga9GqjAAoC8aLwp");
         });
@@ -52,7 +52,7 @@ class ApplicationManagerTest {
     @Test
     void get_goodNetworkWithReturnedJsonMalformed_throwsParseException() {
         Throwable exception = assertThrows(AcrosureException.class, () -> {
-            IHttpClient httpClient = new FakeHttpClient(Scenario.NETWORK_OK);
+            HttpClient httpClient = new FakeHttpClient(Scenario.NETWORK_OK);
             ApplicationManager manager = new ApplicationManager(httpClient);
             manager.get("malformed json");
         });
@@ -63,7 +63,7 @@ class ApplicationManagerTest {
     @Test
     void get_goodNetworkWithWrongDateFormat_throwsParseException() {
         assertThrows(ParseException.class, () -> {
-            IHttpClient httpClient = new FakeHttpClient(Scenario.NETWORK_OK);
+            HttpClient httpClient = new FakeHttpClient(Scenario.NETWORK_OK);
             ApplicationManager manager = new ApplicationManager(httpClient);
             manager.get("wrong date format");
         });
@@ -85,7 +85,7 @@ class ApplicationManagerTest {
 //    void confirm() {
 //    }
 
-    class FakeHttpClient implements IHttpClient {
+    class FakeHttpClient implements HttpClient {
         private Scenario scenario;
 
         FakeHttpClient(Scenario scenario) {
@@ -93,7 +93,7 @@ class ApplicationManagerTest {
         }
 
         @Override
-        public Object call(String method, String methodGroup, JSONObject param) throws IOException, AcrosureException {
+        public Object call(String methodGroup, String method, JSONObject param) throws IOException, AcrosureException {
 
             if (scenario == Scenario.NETWORK_OK) {
                 switch (method) {

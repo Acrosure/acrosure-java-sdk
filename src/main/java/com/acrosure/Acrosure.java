@@ -4,7 +4,7 @@ public class Acrosure {
     private final ApplicationManager applications;
 
     public Acrosure(String token) {
-        IHttpClient httpClient = new HttpClient(token);
+        HttpClient httpClient = new OkHttpClient(token);
         applications = new ApplicationManager(httpClient);
     }
 
