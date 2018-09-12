@@ -3,5 +3,6 @@ out/
 .gradle/
 gradle/
 src/test/resources/sampleobjects/
+acrosure-java-sdk\.iml
 !.gitignore
 *~
