@@ -1,285 +1,242 @@
 package com.acrosure;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+@JsonIgnoreProperties({ "step" })
 public class Application {
-    private final String id;
-    private final JSONObject data;
+    /* system-defined fields */
+    private String id;
+    private String productId;
+    private String applicationNo;
     private ApplicationStatus status;
-    private double amount;
-    private double amountWithTax;
     private ApplicationSource source;
-    private String[] references;
-    private String insurerPackageCode;
-    private String insurerPackageName;
-    private String insurerApplicationNo;
-    private String language;
-    private Date createdAt;
-    private Date updatedAt;
-    private final String productId;
     private String userId;
     private String teamId;
+    private boolean paid;
+    private double netPremium;
+    private double grossPremium;
+    private double vat;
+    private double duty;
+    private ApplicationPackageData packageData;
+    private ArrayList<String> policyIds;
     private ArrayList<ErrorField> errorFields;
     private String errorMessage;
+    private Date expiredAt;
+    private Date createdAt;
+    private Date updatedAt;
 
-    private ArrayList<String> policyIds;
+    /* user-defined fields */
+    private JsonNode basicData;
+    private JsonNode packageOptions;
+    private JsonNode additionalData;
+    private String ref1;
+    private String ref2;
+    private String ref3;
+    private String packageCode;
+    private String language;
 
+    @JsonCreator
     Application(
-            String id,
-            JSONObject formData,
-            ApplicationStatus status,
-            double amount,
-            double amountWithTax,
-            ApplicationSource source,
-            String[] references,
-            String insurerPackageCode,
-            String insurerPackageName,
-            String insurerApplicationNo,
-            String language,
-            Date createdAt,
-            Date updatedAt,
-            String productId,
-            String userId,
-            String teamId,
-            ArrayList<ErrorField> errorFields,
-            String errorMessage,
-            ArrayList<String> policyIds) {
+            @JsonProperty("id") String id,
+            @JsonProperty("product_id") String productId,
+            @JsonProperty("application_no") String applicationNo,
+            @JsonProperty("status") ApplicationStatus status,
+            @JsonProperty("source") ApplicationSource source,
+            @JsonProperty("user_id") String userId,
+            @JsonProperty("team_id") String teamId,
+            @JsonProperty("paid") boolean paid,
+            @JsonProperty("net_premium") double netPremium,
+            @JsonProperty("gross_premium") double grossPremium,
+            @JsonProperty("vat") double vat,
+            @JsonProperty("duty") double duty,
+            @JsonProperty("package_data") ApplicationPackageData packageData,
+            @JsonProperty("policy_ids") ArrayList<String> policyIds,
+            @JsonProperty("error_fields") ArrayList<ErrorField> errorFields,
+            @JsonProperty("error_message") String errorMessage,
+            @JsonProperty("expired_at") Date expiredAt,
+            @JsonProperty("created_at") Date createdAt,
+            @JsonProperty("updated_at") Date updatedAt,
+            @JsonProperty("basic_data") JsonNode basicData,
+            @JsonProperty("package_options") JsonNode packageOptions,
+            @JsonProperty("additional_data") JsonNode additionalData,
+            @JsonProperty("ref1") String ref1,
+            @JsonProperty("ref2") String ref2,
+            @JsonProperty("ref3") String ref3,
+            @JsonProperty("package_code") String packageCode,
+            @JsonProperty("language") String language) {
         this.id = id;
-        this.data = formData;
-        this.status = status;
-        this.amount = amount;
-        this.amountWithTax = amountWithTax;
-        this.source = source;
-        this.references = references;
-        this.insurerPackageCode = insurerPackageCode;
-        this.insurerPackageName = insurerPackageName;
-        this.insurerApplicationNo = insurerApplicationNo;
-        this.language = language;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.productId = productId;
+        this.applicationNo = applicationNo;
+        this.status = status;
+        this.source = source;
         this.userId = userId;
         this.teamId = teamId;
+        this.paid = paid;
+        this.netPremium = netPremium;
+        this.grossPremium = grossPremium;
+        this.vat = vat;
+        this.duty = duty;
+        this.packageData = packageData;
+        this.policyIds = policyIds;
         this.errorFields = errorFields;
         this.errorMessage = errorMessage;
-        this.policyIds = policyIds;
-    }
-
-    void setStatus(ApplicationStatus status) {
-        this.status = status;
-    }
-
-    void setUpdatedAt(Date updatedAt) {
+        this.expiredAt = expiredAt;
+        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.basicData = basicData;
+        this.packageOptions = packageOptions;
+        this.additionalData = additionalData;
+        this.ref1 = ref1;
+        this.ref2 = ref2;
+        this.ref3 = ref3;
+        this.packageCode = packageCode;
+        this.language = language;
     }
 
-    void setErrorFields(ArrayList<ErrorField> errorFields) {
-        this.errorFields = errorFields;
-    }
-
-    void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    void setInsurerApplicationNo(String insurerApplicationNo) {
-        this.insurerApplicationNo = insurerApplicationNo;
-    }
-
-    void setPolicyIds(ArrayList<String> policyIds) {
-        this.policyIds = policyIds;
-    }
-
-    static Application parseJson(JSONObject jsonObject) throws ParseException, AcrosureException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss");
-
-        // aggregated objects
-        ArrayList<ErrorField> errorFields = new ArrayList<>();
-        ArrayList<String> policyIds = new ArrayList<>();
-        String[] references = new String[3];
-
-        try {
-
-            // temp objects
-            Object errorFieldsTemp = jsonObject.get(Fields.ERROR_FIELDS.toString());
-            Object policyIdsTemp = jsonObject.get(Fields.POLICY_IDS.toString());
-
-            if (errorFieldsTemp instanceof JSONArray) {
-                for (Object field: (JSONArray) errorFieldsTemp)
-                    errorFields.add(ErrorField.parseJson((JSONObject) field));
-            }
-
-            if (policyIdsTemp instanceof JSONArray) {
-                for (Object policyId: (JSONArray) policyIdsTemp)
-                    policyIds.add((String) policyId);
-            }
-
-            references[0] = jsonObject.getString(Fields.REF1.toString());
-            references[1] = jsonObject.getString(Fields.REF2.toString());
-            references[2] = jsonObject.getString(Fields.REF3.toString());
-
-            return new Application(
-                    jsonObject.getString(Fields.ID.toString()),
-                    jsonObject.getJSONObject(Fields.FORM_DATA.toString()),
-                    ApplicationStatus.valueOf(jsonObject.getString(Fields.STATUS.toString())),
-                    jsonObject.getDouble(Fields.AMOUNT.toString()),
-                    jsonObject.getDouble(Fields.AMOUNT_WITH_TAX.toString()),
-                    ApplicationSource.valueOf(jsonObject.getString(Fields.SOURCE.toString())),
-                    references,
-                    jsonObject.getString(Fields.INSURER_PACKAGE_CODE.toString()),
-                    jsonObject.getString(Fields.INSURER_PACKAGE_NAME.toString()),
-                    jsonObject.getString(Fields.INSURER_APPLICATION_NO.toString()),
-                    jsonObject.getString(Fields.LANGUAGE.toString()),
-                    dateFormat.parse(jsonObject.getString(Fields.CREATED_AT.toString())),
-                    dateFormat.parse(jsonObject.getString(Fields.UPDATED_AT.toString())),
-                    jsonObject.getString(Fields.PRODUCT_ID.toString()),
-                    jsonObject.getString(Fields.USER_ID.toString()),
-                    jsonObject.getString(Fields.TEAM_ID.toString()),
-                    errorFields,
-                    jsonObject.getString(Fields.ERROR_MESSAGE.toString()),
-                    policyIds);
-        } catch (JSONException e) {
-            throw new AcrosureException("Malformed responded JSON", 1);
-        }
-    }
-
-    public String id() {
+    public String getId() {
         return id;
     }
 
-    public JSONObject data() {
-        return data;
-    }
-
-    public ApplicationStatus status() {
-        return status;
-    }
-
-    public double amount() {
-        return amount;
-    }
-
-    public double amountWithTax() {
-        return amountWithTax;
-    }
-
-    public ApplicationSource source() {
-        return source;
-    }
-
-    public String reference(int index) {
-        return references[index - 1];
-    }
-
-    public String insurerPackageCode() {
-        return insurerPackageCode;
-    }
-
-    public String insurerPackageName() {
-        return insurerPackageName;
-    }
-
-    public String insurerApplicationNo() {
-        return insurerApplicationNo;
-    }
-
-    public String language() {
-        return language;
-    }
-
-    public Date createdAt() {
-        return createdAt;
-    }
-
-    public Date updatedAt() {
-        return updatedAt;
-    }
-
-    public String productId() {
+    public String getProductId() {
         return productId;
     }
 
-    public String userId() {
+    public String getApplicationNo() {
+        return applicationNo;
+    }
+
+    public ApplicationStatus getStatus() {
+        return status;
+    }
+
+    public ApplicationSource getSource() {
+        return source;
+    }
+
+    public String getUserId() {
         return userId;
     }
 
-    public String teamId() {
+    public String getTeamId() {
         return teamId;
     }
 
-    public ArrayList<ErrorField> errorFields() {
-        return errorFields;
+    public boolean isPaid() {
+        return paid;
     }
 
-    public String errorMessage() {
-        return errorMessage;
+    public double getNetPremium() {
+        return netPremium;
     }
 
-    public ArrayList<String> policyIds() {
+    public double getGrossPremium() {
+        return grossPremium;
+    }
+
+    public double getVat() {
+        return vat;
+    }
+
+    public double getDuty() {
+        return duty;
+    }
+
+    public ApplicationPackageData getPackageData() {
+        return packageData;
+    }
+
+    public ArrayList<String> getPolicyIds() {
         return policyIds;
     }
 
-    public void setPackage(InsurancePackage insurancePackage) {
-        this.amount = insurancePackage.amount();
-        this.amountWithTax = insurancePackage.amountWithTax();
-        this.insurerPackageCode = insurancePackage.insurerPackageCode();
-        this.insurerPackageName = insurancePackage.name();
+    public ArrayList<ErrorField> getErrorFields() {
+        return errorFields;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public Date getExpiredAt() {
+        return expiredAt;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public JsonNode getBasicData() {
+        return basicData;
+    }
+
+    public JsonNode getPackageOptions() {
+        return packageOptions;
+    }
+
+    public JsonNode getAdditionalData() {
+        return additionalData;
+    }
+
+    public String getRef1() {
+        return ref1;
+    }
+
+    public String getRef2() {
+        return ref2;
+    }
+
+    public String getRef3() {
+        return ref3;
+    }
+
+    public String getPackageCode() {
+        return packageCode;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 
     @Override
     public String toString() {
         return "Application{" +
                 "id='" + id + '\'' +
-                ", status=" + status +
-                ", amount=" + amount +
-                ", amountWithTax=" + amountWithTax +
-                ", insurerPackageCode='" + insurerPackageCode + '\'' +
-                ", insurerPackageName='" + insurerPackageName + '\'' +
-                ", insurerApplicationNo='" + insurerApplicationNo + '\'' +
                 ", productId='" + productId + '\'' +
+                ", applicationNo='" + applicationNo + '\'' +
+                ", status=" + status +
+                ", source=" + source +
+                ", userId='" + userId + '\'' +
+                ", teamId='" + teamId + '\'' +
+                ", paid=" + paid +
+                ", netPremium=" + netPremium +
+                ", grossPremium=" + grossPremium +
+                ", vat=" + vat +
+                ", duty=" + duty +
+                ", packageData=" + packageData +
                 ", policyIds=" + policyIds +
+                ", errorFields=" + errorFields +
+                ", errorMessage='" + errorMessage + '\'' +
+                ", expiredAt=" + expiredAt +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", basicData=" + basicData +
+                ", packageOptions=" + packageOptions +
+                ", additionalData=" + additionalData +
+                ", ref1='" + ref1 + '\'' +
+                ", ref2='" + ref2 + '\'' +
+                ", ref3='" + ref3 + '\'' +
+                ", packageCode='" + packageCode + '\'' +
+                ", language='" + language + '\'' +
                 '}';
-    }
-
-    public enum Fields {
-        ID("id"),
-        APPLICATION_ID("application_id"),
-        FORM_DATA("form_data"),
-        STATUS("status"),
-        AMOUNT("amount"),
-        AMOUNT_WITH_TAX("amount_with_tax"),
-        SOURCE("source"),
-        REF1("ref1"),
-        REF2("ref2"),
-        REF3("ref3"),
-        INSURER_PACKAGE_CODE("insurer_package_code"),
-        INSURER_PACKAGE_NAME("insurer_package_name"),
-        INSURER_APPLICATION_NO("insurer_application_no"),
-        LANGUAGE("language"),
-        CREATED_AT("created_at"),
-        UPDATED_AT("updated_at"),
-        PRODUCT_ID("product_id"),
-        USER_ID("user_id"),
-        TEAM_ID("team_id"),
-        ERROR_FIELDS("error_fields"),
-        ERROR_MESSAGE("error_message"),
-        POLICY_IDS("policy_ids");
-
-        private final String field;
-
-        Fields(String field) {
-            this.field = field;
-        }
-
-        @Override
-        public String toString() {
-            return field;
-        }
     }
 }
