@@ -1,11 +1,8 @@
 package com.acrosure;
 
-import org.json.JSONObject;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Date;
 
 public class Policy {
@@ -13,8 +10,8 @@ public class Policy {
     private final Date effectiveDate;
     private final Date expiryDate;
     private final String insurerPolicyCode;
-    private final URL insurerPolicyUrl;
-    private final URL policyUrl;
+    private final String insurerPolicyUrl;
+    private final String policyUrl;
     private final double amount;
     private final double amountWithTax;
     private final PolicyStatus status;
@@ -25,41 +22,53 @@ public class Policy {
     private final String telephone;
     private final Date downloadAt;
     private final Date createdAt;
-    private final Application application;
+    private final Date confirmedAt;
+    private final String applicationId;
     private final String teamId;
     private final String userId;
-    private final JSONObject data;
+    private final String productId;
+    private final JsonNode basicData;
+    private final JsonNode packageOptions;
+    private final JsonNode additionalData;
     private final String source;
-    private final String insurerPackageCode;
+    private final String packageCode;
     private final String errorMessage;
     private final String teamName;
-    private final URL signedPolicyUrl;
+    private final String signedPolicyUrl;
+    private final String applicationNo;
 
-    Policy(String id,
-           Date effectiveDate,
-           Date expiryDate,
-           String insurerPolicyCode,
-           URL insurerPolicyUrl,
-           URL policyUrl,
-           double amount,
-           double amountWithTax,
-           PolicyStatus status,
-           String insurerId,
-           String firstName,
-           String lastName,
-           String email,
-           String telephone,
-           Date downloadAt,
-           Date createdAt,
-           Application application,
-           String teamId,
-           String userId,
-           JSONObject data,
-           String source,
-           String insurerPackageCode,
-           String errorMessage,
-           String teamName,
-           URL signedPolicyUrl) {
+    @JsonCreator
+    Policy(
+            @JsonProperty("id") String id,
+            @JsonProperty("effective_date") Date effectiveDate,
+            @JsonProperty("expiry_date") Date expiryDate,
+            @JsonProperty("insurer_policy_code") String insurerPolicyCode,
+            @JsonProperty("insurer_policy_url") String insurerPolicyUrl,
+            @JsonProperty("policy_url") String policyUrl,
+            @JsonProperty("amount") double amount,
+            @JsonProperty("amount_with_tax") double amountWithTax,
+            @JsonProperty("status") PolicyStatus status,
+            @JsonProperty("insurer_id") String insurerId,
+            @JsonProperty("first_name") String firstName,
+            @JsonProperty("last_name") String lastName,
+            @JsonProperty("email") String email,
+            @JsonProperty("telephone") String telephone,
+            @JsonProperty("download_at") Date downloadAt,
+            @JsonProperty("created_at") Date createdAt,
+            @JsonProperty("confirmed_at") Date confirmedAt,
+            @JsonProperty("application_id") String applicationId,
+            @JsonProperty("team_id") String teamId,
+            @JsonProperty("user_id") String userId,
+            @JsonProperty("product_id") String productId,
+            @JsonProperty("basic_data") JsonNode basicData,
+            @JsonProperty("package_options") JsonNode packageOptions,
+            @JsonProperty("additional_data") JsonNode additionalData,
+            @JsonProperty("source") String source,
+            @JsonProperty("package_code") String packageCode,
+            @JsonProperty("error_message") String errorMessage,
+            @JsonProperty("team_name") String teamName,
+            @JsonProperty("signed_policy_url") String signedPolicyUrl,
+            @JsonProperty("application_no") String applicationNo) {
         this.id = id;
         this.effectiveDate = effectiveDate;
         this.expiryDate = expiryDate;
@@ -76,15 +85,20 @@ public class Policy {
         this.telephone = telephone;
         this.downloadAt = downloadAt;
         this.createdAt = createdAt;
-        this.application = application;
+        this.confirmedAt = confirmedAt;
+        this.applicationId = applicationId;
         this.teamId = teamId;
         this.userId = userId;
-        this.data = data;
+        this.productId = productId;
+        this.basicData = basicData;
+        this.packageOptions = packageOptions;
+        this.additionalData = additionalData;
         this.source = source;
-        this.insurerPackageCode = insurerPackageCode;
+        this.packageCode = packageCode;
         this.errorMessage = errorMessage;
         this.teamName = teamName;
         this.signedPolicyUrl = signedPolicyUrl;
+        this.applicationNo = applicationNo;
     }
 
     public String getId() {
@@ -103,11 +117,11 @@ public class Policy {
         return insurerPolicyCode;
     }
 
-    public URL getInsurerPolicyUrl() {
+    public String getInsurerPolicyUrl() {
         return insurerPolicyUrl;
     }
 
-    public URL getPolicyUrl() {
+    public String getPolicyUrl() {
         return policyUrl;
     }
 
@@ -151,8 +165,12 @@ public class Policy {
         return createdAt;
     }
 
-    public Application getApplication() {
-        return application;
+    public Date getConfirmedAt() {
+        return confirmedAt;
+    }
+
+    public String getApplicationId() {
+        return applicationId;
     }
 
     public String getTeamId() {
@@ -163,16 +181,28 @@ public class Policy {
         return userId;
     }
 
-    public JSONObject getData() {
-        return data;
+    public String getProductId() {
+        return productId;
+    }
+
+    public JsonNode getBasicData() {
+        return basicData;
+    }
+
+    public JsonNode getPackageOptions() {
+        return packageOptions;
+    }
+
+    public JsonNode getAdditionalData() {
+        return additionalData;
     }
 
     public String getSource() {
         return source;
     }
 
-    public String getInsurerPackageCode() {
-        return insurerPackageCode;
+    public String getPackageCode() {
+        return packageCode;
     }
 
     public String getErrorMessage() {
@@ -183,100 +213,11 @@ public class Policy {
         return teamName;
     }
 
-    public URL getSignedPolicyUrl() {
+    public String getSignedPolicyUrl() {
         return signedPolicyUrl;
     }
 
-    static Policy parseJson(JSONObject jsonObject, Application application)
-            throws ParseException, MalformedURLException, AcrosureException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss");
-        String insurerPolicyUrl = jsonObject.getString(Fields.INSURER_POLICY_URL.toString());
-        String policyUrl = jsonObject.getString(Fields.POLICY_URL.toString());
-        String signedPolicyUrl = jsonObject.getString(Fields.SIGNED_POLICY_URL.toString());
-        String applicationId = jsonObject.getString(Fields.APPLICATION_ID.toString());
-
-        if (!application.id().equals(applicationId)) {
-            throw new AcrosureException(
-                    "Unexpected application ID: " + applicationId + ". Expected " + application.id(), 500);
-        }
-
-        return new Policy(
-                jsonObject.getString(Fields.ID.toString()),
-                dateFormat.parse(jsonObject.getString(Fields.EFFECTIVE_DATE.toString())),
-                dateFormat.parse(jsonObject.getString(Fields.EXPIRY_DATE.toString())),
-                jsonObject.getString(Fields.INSURER_POLICY_CODE.toString()),
-                insurerPolicyUrl.equals("") ? null : new URL(insurerPolicyUrl),
-                policyUrl.equals("") ? null : new URL(policyUrl),
-                jsonObject.getDouble(Fields.AMOUNT.toString()),
-                jsonObject.getDouble(Fields.AMOUNT_WITH_TAX.toString()),
-                PolicyStatus.valueOf(jsonObject.getString(Fields.STATUS.toString())),
-                jsonObject.getString(Fields.INSURER_ID.toString()),
-                jsonObject.getString(Fields.FIRST_NAME.toString()),
-                jsonObject.getString(Fields.LAST_NAME.toString()),
-                jsonObject.getString(Fields.EMAIL.toString()),
-                jsonObject.getString(Fields.TELEPHONE.toString()),
-                dateFormat.parse(jsonObject.getString(Fields.DOWNLOAD_AT.toString())),
-                dateFormat.parse(jsonObject.getString(Fields.CREATED_AT.toString())),
-                application,
-                jsonObject.getString(Fields.TEAM_ID.toString()),
-                jsonObject.getString(Fields.USER_ID.toString()),
-                jsonObject.getJSONObject(Fields.FORM_DATA.toString()),
-                jsonObject.getString(Fields.SOURCE.toString()),
-                jsonObject.getString(Fields.INSURER_PACKAGE_CODE.toString()),
-                jsonObject.getString(Fields.ERROR_MESSAGE.toString()),
-                jsonObject.getString(Fields.TEAM_NAME.toString()),
-                signedPolicyUrl.equals("") ? null : new URL(signedPolicyUrl));
-    }
-
-    @Override
-    public String toString() {
-        return "Policy{" +
-                "id='" + id + '\'' +
-                ", effectiveDate=" + effectiveDate +
-                ", expiryDate=" + expiryDate +
-                ", amount=" + amount +
-                ", amountWithTax=" + amountWithTax +
-                ", status='" + status + '\'' +
-                ", application=" + application.id() +
-                '}';
-    }
-
-    public enum Fields {
-        ID("id"),
-        EFFECTIVE_DATE("effective_date"),
-        EXPIRY_DATE("expiry_date"),
-        INSURER_POLICY_CODE("insurer_policy_code"),
-        INSURER_POLICY_URL("insurer_policy_url"),
-        POLICY_URL("policy_url"),
-        AMOUNT("amount"),
-        AMOUNT_WITH_TAX("amount_with_tax"),
-        STATUS("status"),
-        INSURER_ID("insurer_id"),
-        FIRST_NAME("first_name"),
-        LAST_NAME("last_name"),
-        EMAIL("email"),
-        TELEPHONE("telephone"),
-        DOWNLOAD_AT("download_at"),
-        CREATED_AT("created_at"),
-        TEAM_ID("team_id"),
-        USER_ID("user_id"),
-        FORM_DATA("form_data"),
-        SOURCE("source"),
-        INSURER_PACKAGE_CODE("insurer_package_code"),
-        ERROR_MESSAGE("error_message"),
-        TEAM_NAME("team_name"),
-        SIGNED_POLICY_URL("signed_policy_url"),
-        APPLICATION_ID("application_id");
-
-        private final String field;
-
-        Fields(String field) {
-            this.field = field;
-        }
-
-        @Override
-        public String toString() {
-            return field;
-        }
+    public String getApplicationNo() {
+        return applicationNo;
     }
 }
