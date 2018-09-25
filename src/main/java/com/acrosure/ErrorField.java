@@ -1,20 +1,26 @@
 package com.acrosure;
 
-import org.json.JSONObject;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ErrorField {
     private final String field;
     private final String errorMessage;
 
-    ErrorField(String field, String errorMessage) {
+    @JsonCreator
+    ErrorField(
+            @JsonProperty("field") String field,
+            @JsonProperty("error_message") String errorMessage) {
         this.field = field;
         this.errorMessage = errorMessage;
     }
 
-    static ErrorField parseJson(JSONObject jsonObject) {
-        return new ErrorField(
-                jsonObject.getString(Fields.FIELD.toString()),
-                jsonObject.getString(Fields.ERROR_MESSAGE.toString()));
+    public String getField() {
+        return field;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
     @Override
@@ -23,21 +29,5 @@ public class ErrorField {
                 "field='" + field + '\'' +
                 ", errorMessage='" + errorMessage + '\'' +
                 '}';
-    }
-
-    public enum Fields {
-        FIELD("field"),
-        ERROR_MESSAGE("error_message");
-
-        private final String field;
-
-        Fields(String field) {
-            this.field = field;
-        }
-
-        @Override
-        public String toString() {
-            return field;
-        }
     }
 }
