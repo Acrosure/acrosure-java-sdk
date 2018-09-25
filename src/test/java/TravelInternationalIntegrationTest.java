@@ -1,69 +1,66 @@
 import com.acrosure.*;
 import com.acrosure.Application;
-import com.acrosure.InsurancePackage;
-import org.json.JSONObject;
+import com.acrosure.Package;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.net.URL;
+import java.util.Arrays;
 
 public class TravelInternationalIntegrationTest {
 
     public static void main(String[] args) {
-        String json = "{\"policy_unit\":\"D\",\"insurer_list\":[],\"policy_date\":\"2018-06-20T07:16:00.071Z\","+
-                "\"expiry_date\":\"2018-06-30T07:16:02.461Z\",\"countries\":[\"UNITED ARAB EMIRATES\"]}";
-//        Acrosure client = new Acrosure("tokn_sample_public");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setPropertyNamingStrategy(new PropertyNamingStrategy.SnakeCaseStrategy());
+
+        URL basicDataPath = TravelInternationalIntegrationTest.class.getClassLoader().getResource("basic_data.json");
+        URL additionalDataPath = TravelInternationalIntegrationTest.class.getClassLoader().getResource("additional_data.json");
+
         Acrosure client = new Acrosure("tokn_sample_secret");
 
-        JSONObject obj = new JSONObject(json);
-
         try {
-            Application app = client.applications().create("prod_ta", obj);
+            ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataPath);
+            ObjectNode additionalData = (ObjectNode) mapper.readTree(additionalDataPath);
+
+            Application app = client.applications().create("prod_contractor", basicData, null, null);
             System.out.println("After creating application...");
             System.out.println(app);
 
-            app.data().getJSONArray("insurer_list").put(new JSONObject(
-                    "{\"card_type\":\"I\",\"first_name\":\"SRIKOTE \",\"last_name\":\"NAEWCHAMPA\"," +
-                            "\"address\":{\"address_no\":\"315\",\"moo\":\"11\",\"village\":\"\",\"lane\":\"\"," +
-                            "\"street\":\"KLANG AWUT\",\"postal_code\":\"34000\",\"province\":\"Ubon Ratchathani\"," +
-                            "\"district\":\"Mueangubonratchathani\",\"subdistrict\":\"Khamyai\"},\"title\":\"MR.\"," +
-                            "\"id_card\":\"1349900696510\",\"birthdate\":\"1995-04-05T07:18:44.543Z\"," +
-                            "\"email\":\"srikote@kmi.tl\",\"phone\":\"0868702109\",\"nominee\":null}"));
-
-            JSONObject appending = new JSONObject(
-                    "{\"customer_title\":\"MR.\",\"customer_first_name\":\"SRIKOTE \"," +
-                            "\"customer_last_name\":\"NAEWCHAMPA\",\"card_type\":\"I\"," +
-                            "\"id_card\":\"1349900696510\",\"email\":\"srikote@kmi.tl\",\"phone\":\"0868702109\"," +
-                            "\"company_name\":\"SRIKOTE \"}");
-
-            for (Iterator<String> it = appending.keys(); it.hasNext(); ) {
-                String key = it.next();
-                app.data().put(key, appending.getString(key));
-            }
-
+            app.setAdditionalData(additionalData);
             client.applications().update(app);
             System.out.println("\nAfter updating application...");
             System.out.println(app);
 
-            Application app2 = client.applications().get(app.id());
+            app.getAdditionalData().put("project_name", "โครงการ อโครบิวดิ้ง");
+            ObjectNode projectSite = app.getAdditionalData().putObject("project_site");
+            projectSite.put("subdistrict", "จอมพล");
+            projectSite.put("district", "จตุจักร");
+            projectSite.put("province", "กรุงเทพมหานคร");
+            client.applications().update(app);
+            System.out.println("\nAfter updating application...");
+            System.out.println(app);
+
+            Application app2 = client.applications().get(app.getId());
             System.out.println("\nAfter getting application...");
             System.out.println(app2);
 
-            ArrayList<InsurancePackage> insurancePackages = client.applications().getPackages(app.id());
+            Package[] packages = client.applications().getPackages(app.getId());
             System.out.println("\nAfter getting packages...");
-            System.out.println(insurancePackages);
+            System.out.println(Arrays.toString(packages));
 
-            app.setPackage(insurancePackages.get(1));
+            app.setPackageCode(packages[0].getPackageCode());
             client.applications().update(app);
-            System.out.println("\nAfter updating application...");
+            System.out.println("\nAfter selecting a package...");
             System.out.println(app);
 
-            ArrayList<Policy> policies = client.applications().confirm(app);
+            Policy[] policies = client.applications().confirm(app);
             System.out.println("\nAfter confirming application...");
-            System.out.println(policies);
+            System.out.println(Arrays.toString(policies));
             System.out.println(app);
-        } catch (IOException | ParseException e) {
+
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (AcrosureException e) {
             System.out.println(e.getMessage() + ", " + e.getStatusCode());
