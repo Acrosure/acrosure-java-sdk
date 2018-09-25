@@ -3,7 +3,7 @@ package com.acrosure;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -32,9 +32,9 @@ public class Application {
     private Date updatedAt;
 
     /** user-defined fields */
-    private JsonNode basicData;
-    private JsonNode packageOptions;
-    private JsonNode additionalData;
+    private ObjectNode basicData;
+    private ObjectNode packageOptions;
+    private ObjectNode additionalData;
     private String ref1;
     private String ref2;
     private String ref3;
@@ -62,9 +62,9 @@ public class Application {
             @JsonProperty("expired_at") Date expiredAt,
             @JsonProperty("created_at") Date createdAt,
             @JsonProperty("updated_at") Date updatedAt,
-            @JsonProperty("basic_data") JsonNode basicData,
-            @JsonProperty("package_options") JsonNode packageOptions,
-            @JsonProperty("additional_data") JsonNode additionalData,
+            @JsonProperty("basic_data") ObjectNode basicData,
+            @JsonProperty("package_options") ObjectNode packageOptions,
+            @JsonProperty("additional_data") ObjectNode additionalData,
             @JsonProperty("ref1") String ref1,
             @JsonProperty("ref2") String ref2,
             @JsonProperty("ref3") String ref3,
@@ -175,15 +175,15 @@ public class Application {
         return updatedAt;
     }
 
-    public JsonNode getBasicData() {
+    public ObjectNode getBasicData() {
         return basicData;
     }
 
-    public JsonNode getPackageOptions() {
+    public ObjectNode getPackageOptions() {
         return packageOptions;
     }
 
-    public JsonNode getAdditionalData() {
+    public ObjectNode getAdditionalData() {
         return additionalData;
     }
 
@@ -208,15 +208,15 @@ public class Application {
     }
 
     /** user-defined fields */
-    public void setBasicData(JsonNode basicData) {
+    public void setBasicData(ObjectNode basicData) {
         this.basicData = basicData;
     }
 
-    public void setPackageOptions(JsonNode packageOptions) {
+    public void setPackageOptions(ObjectNode packageOptions) {
         this.packageOptions = packageOptions;
     }
 
-    public void setAdditionalData(JsonNode additionalData) {
+    public void setAdditionalData(ObjectNode additionalData) {
         this.additionalData = additionalData;
     }
 

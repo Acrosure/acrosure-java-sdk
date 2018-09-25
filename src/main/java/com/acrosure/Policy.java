@@ -3,6 +3,8 @@ package com.acrosure;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import java.util.Date;
 
 public class Policy {
@@ -27,9 +29,9 @@ public class Policy {
     private final String teamId;
     private final String userId;
     private final String productId;
-    private final JsonNode basicData;
-    private final JsonNode packageOptions;
-    private final JsonNode additionalData;
+    private final ObjectNode basicData;
+    private final ObjectNode packageOptions;
+    private final ObjectNode additionalData;
     private final String source;
     private final String packageCode;
     private final String errorMessage;
@@ -60,9 +62,9 @@ public class Policy {
             @JsonProperty("team_id") String teamId,
             @JsonProperty("user_id") String userId,
             @JsonProperty("product_id") String productId,
-            @JsonProperty("basic_data") JsonNode basicData,
-            @JsonProperty("package_options") JsonNode packageOptions,
-            @JsonProperty("additional_data") JsonNode additionalData,
+            @JsonProperty("basic_data") ObjectNode basicData,
+            @JsonProperty("package_options") ObjectNode packageOptions,
+            @JsonProperty("additional_data") ObjectNode additionalData,
             @JsonProperty("source") String source,
             @JsonProperty("package_code") String packageCode,
             @JsonProperty("error_message") String errorMessage,
