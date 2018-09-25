@@ -10,7 +10,7 @@ public class Premium {
     private double duty;
 
     @JsonCreator
-    public Premium(
+    Premium(
             @JsonProperty("net_premium") double netPremium,
             @JsonProperty("gross_premium") double grossPremium,
             @JsonProperty("vat") double vat,

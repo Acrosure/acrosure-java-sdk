@@ -17,7 +17,7 @@ public class Package {
     private JsonNode extra;
 
     @JsonCreator
-    public Package(
+    Package(
             @JsonProperty("package_name") String packageName,
             @JsonProperty("package_code") String packageCode,
             @JsonProperty("package_description") String packageDescription,

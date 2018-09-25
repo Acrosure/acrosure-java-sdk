@@ -8,7 +8,7 @@ public class Condition<V> {
     private V value;
 
     @JsonCreator
-    public Condition(
+    Condition(
             @JsonProperty("condition") String condition,
             @JsonProperty("value") V value) {
         this.condition = condition;

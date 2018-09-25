@@ -12,7 +12,7 @@ public class CoverageItem {
     private boolean canHide;
 
     @JsonCreator
-    public CoverageItem(
+    CoverageItem(
             @JsonProperty("key") String key,
             @JsonProperty("detail") String detail,
             @JsonProperty("full_detail") String fullDetail,
