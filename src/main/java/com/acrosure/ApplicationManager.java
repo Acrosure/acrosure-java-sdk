@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
 
 public class ApplicationManager {
     private final HttpClient httpClient;
@@ -41,12 +39,25 @@ public class ApplicationManager {
     }
 
 
-    public Application create(String productId, ObjectNode formData) throws IOException, AcrosureException {
+    public Application create(
+            String productId,
+            ObjectNode basicData,
+            ObjectNode packageOptions,
+            ObjectNode additionalData) throws IOException, AcrosureException {
         ObjectNode requestPayload = (ObjectNode) mapper.readTree("{}");
 
         requestPayload.put("product_id", productId);
-        requestPayload.putNull("form_data");
-        requestPayload.replace("form_data", formData);
+
+        if (basicData != null) {
+            requestPayload.putNull("basic_data");
+            requestPayload.replace("basic_data", basicData);
+        } else if (packageOptions != null) {
+            requestPayload.putNull("package_options");
+            requestPayload.replace("package_options", packageOptions);
+        } else if (additionalData != null) {
+            requestPayload.putNull("additional_data");
+            requestPayload.replace("additional_data", additionalData);
+        }
 
         ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.CREATE.toString(), requestPayload);
 

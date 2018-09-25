@@ -1,14 +1,17 @@
 package com.acrosure;
 
 public class Acrosure {
-    private final ApplicationManager applications;
+    private final ApplicationManager applicationManager;
 
     public Acrosure(String token) {
-        HttpClient httpClient = new OkHttpClient(token);
-        applications = new ApplicationManager(httpClient);
+        this(new OkHttpClient(token));
+    }
+
+    public Acrosure(HttpClient httpClient) {
+        applicationManager = new ApplicationManager(httpClient);
     }
 
     public ApplicationManager applications() {
-        return applications;
+        return applicationManager;
     }
 }
