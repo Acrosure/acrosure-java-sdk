@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ApplicationPackageData {
     private CoverageItem[] coverageItems;
@@ -38,5 +38,15 @@ public class ApplicationPackageData {
 
     public JsonNode getPackageOptions() {
         return packageOptions;
+    }
+
+    @Override
+    public String toString() {
+        return "ApplicationPackageData{" +
+                "coverageItems=" + Arrays.toString(coverageItems) +
+                ", packageCode='" + packageCode + '\'' +
+                ", premiumDetail=" + premiumDetail +
+                ", packageOptions=" + packageOptions +
+                '}';
     }
 }

@@ -36,4 +36,14 @@ public class Premium {
     public double getDuty() {
         return duty;
     }
+
+    @Override
+    public String toString() {
+        return "Premium{" +
+                "netPremium=" + netPremium +
+                ", grossPremium=" + grossPremium +
+                ", vat=" + vat +
+                ", duty=" + duty +
+                '}';
+    }
 }

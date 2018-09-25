@@ -22,4 +22,12 @@ public class Condition<V> {
     public V getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "Condition{" +
+                "condition='" + condition + '\'' +
+                ", value=" + value +
+                '}';
+    }
 }

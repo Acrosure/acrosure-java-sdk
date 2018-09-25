@@ -50,4 +50,16 @@ public class CoverageItem {
     public boolean isCanHide() {
         return canHide;
     }
+
+    @Override
+    public String toString() {
+        return "CoverageItem{" +
+                "key='" + key + '\'' +
+                ", detail='" + detail + '\'' +
+                ", fullDetail='" + fullDetail + '\'' +
+                ", category='" + category + '\'' +
+                ", value=" + value +
+                ", canHide=" + canHide +
+                '}';
+    }
 }

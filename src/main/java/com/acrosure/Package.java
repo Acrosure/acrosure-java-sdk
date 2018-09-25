@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Package {
     private String packageName;
@@ -66,5 +66,19 @@ public class Package {
 
     public JsonNode getExtra() {
         return extra;
+    }
+
+    @Override
+    public String toString() {
+        return "Package{" +
+                "packageName='" + packageName + '\'' +
+                ", packageCode='" + packageCode + '\'' +
+                ", packageDescription='" + packageDescription + '\'' +
+                ", coverageItems=" + Arrays.toString(coverageItems) +
+                ", premium=" + premium +
+                ", conditions=" + Arrays.toString(conditions) +
+                ", packageOptions=" + packageOptions +
+                ", extra=" + extra +
+                '}';
     }
 }

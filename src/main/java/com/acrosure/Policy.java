@@ -220,4 +220,40 @@ public class Policy {
     public String getApplicationNo() {
         return applicationNo;
     }
+
+    @Override
+    public String toString() {
+        return "Policy{" +
+                "id='" + id + '\'' +
+                ", effectiveDate=" + effectiveDate +
+                ", expiryDate=" + expiryDate +
+                ", insurerPolicyCode='" + insurerPolicyCode + '\'' +
+                ", insurerPolicyUrl='" + insurerPolicyUrl + '\'' +
+                ", policyUrl='" + policyUrl + '\'' +
+                ", amount=" + amount +
+                ", amountWithTax=" + amountWithTax +
+                ", status=" + status +
+                ", insurerId='" + insurerId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", downloadAt=" + downloadAt +
+                ", createdAt=" + createdAt +
+                ", confirmedAt=" + confirmedAt +
+                ", applicationId='" + applicationId + '\'' +
+                ", teamId='" + teamId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", productId='" + productId + '\'' +
+                ", basicData=" + basicData +
+                ", packageOptions=" + packageOptions +
+                ", additionalData=" + additionalData +
+                ", source='" + source + '\'' +
+                ", packageCode='" + packageCode + '\'' +
+                ", errorMessage='" + errorMessage + '\'' +
+                ", teamName='" + teamName + '\'' +
+                ", signedPolicyUrl='" + signedPolicyUrl + '\'' +
+                ", applicationNo='" + applicationNo + '\'' +
+                '}';
+    }
 }
