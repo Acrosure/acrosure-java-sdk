@@ -13,7 +13,7 @@ public class ApplicationPackageData {
     private JsonNode packageOptions;
 
     @JsonCreator
-    public ApplicationPackageData(
+    ApplicationPackageData(
             @JsonProperty("coverage_items") ArrayList<CoverageItem> coverageItems,
             @JsonProperty("package_code") String packageCode,
             @JsonProperty("premium_detail") JsonNode premiumDetail,
