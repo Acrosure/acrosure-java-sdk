@@ -1,7 +1,9 @@
 package com.acrosure;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -10,93 +12,66 @@ import java.util.ArrayList;
 public class ApplicationManager {
     private final HttpClient httpClient;
     private final String METHOD_GROUP;
+    private final ObjectMapper mapper;
 
     ApplicationManager(HttpClient httpClient) {
         this.httpClient = httpClient;
-        METHOD_GROUP = "applications";
+        this.METHOD_GROUP = "applications";
+        this.mapper = new ObjectMapper();
+
+        mapper.setPropertyNamingStrategy(new PropertyNamingStrategy.SnakeCaseStrategy());
     }
 
-    public Application get(String applicationId) throws IOException, AcrosureException, ParseException {
-        JSONObject requestPayload = new JSONObject(), responseData;
+    public Application get(String applicationId) throws IOException, AcrosureException {
+        ObjectNode requestPayload = (ObjectNode) mapper.readTree("{}");
 
-        requestPayload.put(Application.Fields.APPLICATION_ID.toString(), applicationId);
-        responseData = (JSONObject) httpClient.call(METHOD_GROUP, Methods.GET.toString(), requestPayload);
+        requestPayload.put("application_id", applicationId);
+        ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.GET.toString(), requestPayload);
 
-        return Application.parseJson(responseData);
+        return mapper.treeToValue(responseData, Application.class);
     }
 
-    public ArrayList<InsurancePackage> getPackages(String applicationId) throws IOException, AcrosureException {
-        JSONObject requestPayload = new JSONObject();
-        JSONArray responseData;
-        ArrayList<InsurancePackage> insurancePackages = new ArrayList<>();
+    public Package[] getPackages(String applicationId) throws IOException, AcrosureException {
+        ObjectNode requestPayload = (ObjectNode) mapper.readTree("{}");
 
-        requestPayload.put(Application.Fields.APPLICATION_ID.toString(), applicationId);
-        responseData = (JSONArray) httpClient.call(METHOD_GROUP, Methods.GET_PACKAGES.toString(), requestPayload);
+        requestPayload.put("application_id", applicationId);
+        ArrayNode responseData = (ArrayNode) httpClient.call(METHOD_GROUP, Methods.GET_PACKAGES.toString(), requestPayload);
 
-        for (Object object: responseData)
-            insurancePackages.add(InsurancePackage.parseJson((JSONObject) object));
-
-        return insurancePackages;
+        return mapper.treeToValue(responseData, Package[].class);
     }
 
 
-    public Application create(String productId, JSONObject data) throws IOException, AcrosureException, ParseException {
-        JSONObject requestPayload = new JSONObject(), responseData;
+    public Application create(String productId, ObjectNode formData) throws IOException, AcrosureException {
+        ObjectNode requestPayload = (ObjectNode) mapper.readTree("{}");
 
-        requestPayload.put(Application.Fields.PRODUCT_ID.toString(), productId);
-        requestPayload.put(Application.Fields.FORM_DATA.toString(), data);
+        requestPayload.put("product_id", productId);
+        requestPayload.putNull("form_data");
+        requestPayload.replace("form_data", formData);
 
-        responseData = (JSONObject) httpClient.call(METHOD_GROUP, Methods.CREATE.toString(), requestPayload);
+        ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.CREATE.toString(), requestPayload);
 
-        return Application.parseJson(responseData);
+        return mapper.treeToValue(responseData, Application.class);
     }
 
-    public Application update(Application application) throws IOException, AcrosureException, ParseException {
-        JSONObject requestPayload = new JSONObject(), responseData;
-        Application applicationTemp;
+    public Application update(Application application) throws IOException, AcrosureException {
+        ObjectNode requestPayload = mapper.valueToTree(application);
+        ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.UPDATE.toString(), requestPayload);
 
-        requestPayload.put(Application.Fields.APPLICATION_ID.toString(), application.id());
-        requestPayload.put(Application.Fields.FORM_DATA.toString(), application.data());
-        requestPayload.put(Application.Fields.INSURER_PACKAGE_CODE.toString(), application.insurerPackageCode());
-        requestPayload.put(Application.Fields.INSURER_PACKAGE_NAME.toString(), application.insurerPackageName());
-        requestPayload.put(Application.Fields.AMOUNT.toString(), application.amount());
-        requestPayload.put(Application.Fields.AMOUNT_WITH_TAX.toString(), application.amountWithTax());
-        requestPayload.put(Application.Fields.REF1.toString(), application.reference(1));
-        requestPayload.put(Application.Fields.REF2.toString(), application.reference(2));
-        requestPayload.put(Application.Fields.REF3.toString(), application.reference(3));
+        Application origin = mapper.treeToValue(responseData, Application.class);
 
-        responseData = (JSONObject) httpClient.call(METHOD_GROUP, Methods.UPDATE.toString(), requestPayload);
-        applicationTemp = Application.parseJson(responseData);
-
-        application.setStatus(applicationTemp.status());
-        application.setUpdatedAt(applicationTemp.updatedAt());
-        application.setErrorFields(applicationTemp.errorFields());
-        application.setErrorMessage(applicationTemp.errorMessage());
-
-        return application;
+        return application.copy(origin);
     }
 
-    public ArrayList<Policy> confirm(Application application) throws IOException, AcrosureException, ParseException {
-        JSONObject requestPayload = new JSONObject();
-        JSONArray responseData;
-        ArrayList<Policy> policies = new ArrayList<>();
-        Application applicationTemp;
+    public Policy[] confirm(Application application) throws IOException, AcrosureException {
+        ObjectNode requestPayload = (ObjectNode) mapper.readTree("{}");
 
-        requestPayload.put(Application.Fields.APPLICATION_ID.toString(), application.id());
-        responseData = (JSONArray) httpClient.call(METHOD_GROUP, Methods.CONFIRM.toString(), requestPayload);
-        application.setStatus(ApplicationStatus.COMPLETED);
+        requestPayload.put("application_id", application.getId());
+        ArrayNode responseData = (ArrayNode) httpClient.call(METHOD_GROUP, Methods.CONFIRM.toString(), requestPayload);
 
-        for (Object object: responseData)
-            policies.add(Policy.parseJson((JSONObject) object, application));
+        Application origin = get(application.getId());
+        application.copy(origin);
 
-        applicationTemp = get(application.id());
-
-        application.setStatus(applicationTemp.status());
-        application.setInsurerApplicationNo(applicationTemp.insurerApplicationNo());
-        application.setUpdatedAt(applicationTemp.updatedAt());
-        application.setPolicyIds(applicationTemp.policyIds());
-
-        return policies;
+        return mapper.treeToValue(responseData, Policy[].class);
     }
 
     private enum Methods {
