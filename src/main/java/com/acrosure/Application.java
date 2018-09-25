@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 @JsonIgnoreProperties({ "step" })
 public class Application {
-    /* system-defined fields */
+    /** system-defined fields */
     private String id;
     private String productId;
     private String applicationNo;
@@ -31,7 +31,7 @@ public class Application {
     private Date createdAt;
     private Date updatedAt;
 
-    /* user-defined fields */
+    /** user-defined fields */
     private JsonNode basicData;
     private JsonNode packageOptions;
     private JsonNode additionalData;
@@ -205,6 +205,62 @@ public class Application {
 
     public String getLanguage() {
         return language;
+    }
+
+    /** user-defined fields */
+    public void setBasicData(JsonNode basicData) {
+        this.basicData = basicData;
+    }
+
+    public void setPackageOptions(JsonNode packageOptions) {
+        this.packageOptions = packageOptions;
+    }
+
+    public void setAdditionalData(JsonNode additionalData) {
+        this.additionalData = additionalData;
+    }
+
+    public void setRef1(String ref1) {
+        this.ref1 = ref1;
+    }
+
+    public void setRef2(String ref2) {
+        this.ref2 = ref2;
+    }
+
+    public void setRef3(String ref3) {
+        this.ref3 = ref3;
+    }
+
+    public void setPackageCode(String packageCode) {
+        this.packageCode = packageCode;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    /** copy method */
+    Application copy(Application origin) {
+        this.applicationNo = origin.applicationNo;
+        this.createdAt = origin.createdAt;
+        this.duty = origin.duty;
+        this.errorFields = origin.errorFields;
+        this.errorMessage = origin.errorMessage;
+        this.expiredAt = origin.expiredAt;
+        this.grossPremium = origin.grossPremium;
+        this.netPremium = origin.netPremium;
+        this.packageData = origin.packageData;
+        this.paid = origin.paid;
+        this.policyIds = origin.policyIds;
+        this.source = origin.source;
+        this.status = origin.status;
+        this.teamId = origin.teamId;
+        this.updatedAt = origin.updatedAt;
+        this.userId = origin.userId;
+        this.vat = origin.vat;
+
+        return this;
     }
 
     @Override
