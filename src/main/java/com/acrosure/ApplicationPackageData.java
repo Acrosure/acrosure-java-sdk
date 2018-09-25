@@ -7,14 +7,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.ArrayList;
 
 public class ApplicationPackageData {
-    private ArrayList<CoverageItem> coverageItems;
+    private CoverageItem[] coverageItems;
     private String packageCode;
     private JsonNode premiumDetail;
     private JsonNode packageOptions;
 
     @JsonCreator
     ApplicationPackageData(
-            @JsonProperty("coverage_items") ArrayList<CoverageItem> coverageItems,
+            @JsonProperty("coverage_items") CoverageItem[] coverageItems,
             @JsonProperty("package_code") String packageCode,
             @JsonProperty("premium_detail") JsonNode premiumDetail,
             @JsonProperty("package_options") JsonNode packageOptions) {
@@ -24,7 +24,7 @@ public class ApplicationPackageData {
         this.packageOptions = packageOptions;
     }
 
-    public ArrayList<CoverageItem> getCoverageItems() {
+    public CoverageItem[] getCoverageItems() {
         return coverageItems;
     }
 

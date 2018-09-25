@@ -24,8 +24,8 @@ public class Application {
     private double vat;
     private double duty;
     private ApplicationPackageData packageData;
-    private ArrayList<String> policyIds;
-    private ArrayList<ErrorField> errorFields;
+    private String[] policyIds;
+    private ErrorField[] errorFields;
     private String errorMessage;
     private Date expiredAt;
     private Date createdAt;
@@ -56,8 +56,8 @@ public class Application {
             @JsonProperty("vat") double vat,
             @JsonProperty("duty") double duty,
             @JsonProperty("package_data") ApplicationPackageData packageData,
-            @JsonProperty("policy_ids") ArrayList<String> policyIds,
-            @JsonProperty("error_fields") ArrayList<ErrorField> errorFields,
+            @JsonProperty("policy_ids") String[] policyIds,
+            @JsonProperty("error_fields") ErrorField[] errorFields,
             @JsonProperty("error_message") String errorMessage,
             @JsonProperty("expired_at") Date expiredAt,
             @JsonProperty("created_at") Date createdAt,
@@ -151,11 +151,11 @@ public class Application {
         return packageData;
     }
 
-    public ArrayList<String> getPolicyIds() {
+    public String[] getPolicyIds() {
         return policyIds;
     }
 
-    public ArrayList<ErrorField> getErrorFields() {
+    public ErrorField[] getErrorFields() {
         return errorFields;
     }
 
@@ -223,8 +223,8 @@ public class Application {
                 ", vat=" + vat +
                 ", duty=" + duty +
                 ", packageData=" + packageData +
-                ", policyIds=" + policyIds +
-                ", errorFields=" + errorFields +
+                ", policyIds=" + Arrays.toString(policyIds) +
+                ", errorFields=" + Arrays.toString(errorFields) +
                 ", errorMessage='" + errorMessage + '\'' +
                 ", expiredAt=" + expiredAt +
                 ", createdAt=" + createdAt +

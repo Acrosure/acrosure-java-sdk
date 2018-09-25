@@ -10,9 +10,9 @@ public class Package {
     private String packageName;
     private String packageCode;
     private String packageDescription;
-    private ArrayList<CoverageItem> coverageItems;
+    private CoverageItem[] coverageItems;
     private Premium premium;
-    private ArrayList<Condition> conditions;
+    private Condition[] conditions;
     private JsonNode packageOptions;
     private JsonNode extra;
 
@@ -21,9 +21,9 @@ public class Package {
             @JsonProperty("package_name") String packageName,
             @JsonProperty("package_code") String packageCode,
             @JsonProperty("package_description") String packageDescription,
-            @JsonProperty("coverage_items") ArrayList<CoverageItem> coverageItems,
+            @JsonProperty("coverage_items") CoverageItem[] coverageItems,
             @JsonProperty("premium") Premium premium,
-            @JsonProperty("conditions") ArrayList<Condition> conditions,
+            @JsonProperty("conditions") Condition[] conditions,
             @JsonProperty("package_options") JsonNode packageOptions,
             @JsonProperty("extra") JsonNode extra) {
         this.packageName = packageName;
@@ -48,7 +48,7 @@ public class Package {
         return packageDescription;
     }
 
-    public ArrayList<CoverageItem> getCoverageItems() {
+    public CoverageItem[] getCoverageItems() {
         return coverageItems;
     }
 
@@ -56,7 +56,7 @@ public class Package {
         return premium;
     }
 
-    public ArrayList<Condition> getConditions() {
+    public Condition[] getConditions() {
         return conditions;
     }
 
