@@ -24,7 +24,11 @@ public class TravelInternationalIntegrationTest {
             ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataPath);
             ObjectNode additionalData = (ObjectNode) mapper.readTree(additionalDataPath);
 
-            Application app = client.applications().create("prod_contractor", basicData, null, null);
+            ApplicationCreateForm applicationCreateForm = new ApplicationCreateForm();
+            applicationCreateForm.setProductId("prod_contractor");
+            applicationCreateForm.setBasicData(basicData);
+
+            Application app = client.applications().create(applicationCreateForm);
             System.out.println("After creating application...");
             System.out.println(app);
 
