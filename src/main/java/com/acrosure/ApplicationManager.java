@@ -1,5 +1,6 @@
 package com.acrosure;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -18,6 +19,7 @@ public class ApplicationManager {
         this.mapper = new ObjectMapper();
 
         mapper.setPropertyNamingStrategy(new PropertyNamingStrategy.SnakeCaseStrategy());
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
     public Application get(String applicationId) throws IOException, AcrosureException {
