@@ -38,27 +38,16 @@ public class ApplicationManager {
         return mapper.treeToValue(responseData, Package[].class);
     }
 
+    public Application create(String productId) throws IOException, AcrosureException {
+        ApplicationCreateForm applicationCreateForm = new ApplicationCreateForm();
 
-    public Application create(
-            String productId,
-            ObjectNode basicData,
-            ObjectNode packageOptions,
-            ObjectNode additionalData) throws IOException, AcrosureException {
-        ObjectNode requestPayload = (ObjectNode) mapper.readTree("{}");
+        applicationCreateForm.setProductId(productId);
 
-        requestPayload.put("product_id", productId);
+        return this.create(applicationCreateForm);
+    }
 
-        if (basicData != null) {
-            requestPayload.putNull("basic_data");
-            requestPayload.replace("basic_data", basicData);
-        } else if (packageOptions != null) {
-            requestPayload.putNull("package_options");
-            requestPayload.replace("package_options", packageOptions);
-        } else if (additionalData != null) {
-            requestPayload.putNull("additional_data");
-            requestPayload.replace("additional_data", additionalData);
-        }
-
+    public Application create(ApplicationCreateForm applicationCreateForm) throws IOException, AcrosureException {
+        ObjectNode requestPayload = mapper.valueToTree(applicationCreateForm);
         ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.CREATE.toString(), requestPayload);
 
         return mapper.treeToValue(responseData, Application.class);
