@@ -39,6 +39,7 @@ public class Application {
     private String ref2;
     private String ref3;
     private String packageCode;
+    private String groupPolicyId;
     private String language;
 
     @JsonCreator
@@ -69,6 +70,7 @@ public class Application {
             @JsonProperty("ref2") String ref2,
             @JsonProperty("ref3") String ref3,
             @JsonProperty("package_code") String packageCode,
+            @JsonProperty("group_policy_id") String groupPolicyId,
             @JsonProperty("language") String language) {
         this.id = id;
         this.productId = productId;
@@ -96,6 +98,7 @@ public class Application {
         this.ref2 = ref2;
         this.ref3 = ref3;
         this.packageCode = packageCode;
+        this.groupPolicyId = groupPolicyId;
         this.language = language;
     }
 
@@ -203,6 +206,10 @@ public class Application {
         return packageCode;
     }
 
+    public String getGroupPolicyId() {
+        return groupPolicyId;
+    }
+
     public String getLanguage() {
         return language;
     }
@@ -234,6 +241,10 @@ public class Application {
 
     public void setPackageCode(String packageCode) {
         this.packageCode = packageCode;
+    }
+
+    public void setGroupPolicyId(String groupPolicyId) {
+        this.groupPolicyId = groupPolicyId;
     }
 
     public void setLanguage(String language) {
