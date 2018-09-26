@@ -54,7 +54,8 @@ public class ApplicationManager {
     }
 
     public Application update(Application application) throws IOException, AcrosureException {
-        ObjectNode requestPayload = mapper.valueToTree(application);
+        ApplicationUpdateForm applicationUpdateForm = mapper.convertValue(application, ApplicationUpdateForm.class);
+        ObjectNode requestPayload = mapper.valueToTree(applicationUpdateForm);
         ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.UPDATE.toString(), requestPayload);
 
         Application origin = mapper.treeToValue(responseData, Application.class);
