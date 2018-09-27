@@ -15,7 +15,7 @@ public class Application {
     private String productId;
     private String applicationNo;
     private ApplicationStatus status;
-    private ApplicationSource source;
+    private final ApplicationSource source = ApplicationSource.PARTNER;
     private String userId;
     private String teamId;
     private boolean paid;
@@ -47,7 +47,6 @@ public class Application {
             @JsonProperty("product_id") String productId,
             @JsonProperty("application_no") String applicationNo,
             @JsonProperty("status") ApplicationStatus status,
-            @JsonProperty("source") ApplicationSource source,
             @JsonProperty("user_id") String userId,
             @JsonProperty("team_id") String teamId,
             @JsonProperty("paid") boolean paid,
@@ -74,7 +73,6 @@ public class Application {
         this.productId = productId;
         this.applicationNo = applicationNo;
         this.status = status;
-        this.source = source;
         this.userId = userId;
         this.teamId = teamId;
         this.paid = paid;
@@ -253,7 +251,6 @@ public class Application {
         this.packageData = origin.packageData;
         this.paid = origin.paid;
         this.policyIds = origin.policyIds;
-        this.source = origin.source;
         this.status = origin.status;
         this.teamId = origin.teamId;
         this.updatedAt = origin.updatedAt;
