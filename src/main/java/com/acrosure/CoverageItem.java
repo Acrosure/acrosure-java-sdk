@@ -8,8 +8,10 @@ public class CoverageItem {
     private String detail;
     private String fullDetail;
     private String category;
-    private double value;
-    private boolean canHide;
+    private String valueText;
+    private double valueNumber;
+    private String valueUnit;
+    private boolean main;
 
     @JsonCreator
     CoverageItem(
@@ -17,14 +19,18 @@ public class CoverageItem {
             @JsonProperty("detail") String detail,
             @JsonProperty("full_detail") String fullDetail,
             @JsonProperty("category") String category,
-            @JsonProperty("value") double value,
-            @JsonProperty("can_hide") boolean canHide) {
+            @JsonProperty("value_text") String valueText,
+            @JsonProperty("value_number") double valueNumber,
+            @JsonProperty("value_unit") String valueUnit,
+            @JsonProperty("main") boolean main) {
         this.key = key;
         this.detail = detail;
         this.fullDetail = fullDetail;
         this.category = category;
-        this.value = value;
-        this.canHide = canHide;
+        this.valueText = valueText;
+        this.valueNumber = valueNumber;
+        this. valueUnit = valueUnit;
+        this.main = main;
     }
 
     public String getKey() {
@@ -43,12 +49,20 @@ public class CoverageItem {
         return category;
     }
 
-    public double getValue() {
-        return value;
+    public String getValueText() {
+        return valueText;
     }
 
-    public boolean isCanHide() {
-        return canHide;
+    public double getValueNumber() {
+        return valueNumber;
+    }
+
+    public String getValueUnit() {
+        return valueUnit;
+    }
+
+    public boolean isMain() {
+        return main;
     }
 
     @Override
@@ -58,8 +72,10 @@ public class CoverageItem {
                 ", detail='" + detail + '\'' +
                 ", fullDetail='" + fullDetail + '\'' +
                 ", category='" + category + '\'' +
-                ", value=" + value +
-                ", canHide=" + canHide +
+                ", valueText='" + valueText + '\'' +
+                ", valueNumber=" + valueNumber +
+                ", valueUnit='" + valueUnit + '\'' +
+                ", canHide=" + main +
                 '}';
     }
 }
