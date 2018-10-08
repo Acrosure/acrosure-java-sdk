@@ -62,5 +62,11 @@
   "warranty_expiry_date": "0001-01-01",
   "payment_type": "ONLINE",
   "policy_code": "",
-  "files": null
+  "files": null,
+  "project_name": "โครงการ อโครบิวดิ้ง",
+  "project_site": {
+    "subdistrict": "จอมพล",
+    "district": "จตุจักร",
+    "province": "กรุงเทพมหานคร"
+  }
 }
