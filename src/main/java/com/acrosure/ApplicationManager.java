@@ -1,6 +1,7 @@
 package com.acrosure;
 
 import com.acrosure.resource.Application;
+import com.acrosure.resource.ApplicationList;
 import com.acrosure.resource.Package;
 import com.acrosure.resource.Policy;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -35,6 +36,14 @@ public class ApplicationManager {
         ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.GET.toString(), requestPayload);
 
         return mapper.treeToValue(responseData, Application.class);
+    }
+
+    public ApplicationList list(ApplicationQuery query) throws IOException, AcrosureException {
+        ObjectNode requestPayload = mapper.valueToTree(query);
+
+        ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.GET.toString(), requestPayload);
+
+        return mapper.treeToValue(responseData, ApplicationList.class);
     }
 
     public Application create(String productId) throws IOException, AcrosureException {

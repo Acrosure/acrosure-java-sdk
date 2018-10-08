@@ -3,6 +3,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.acrosure.Acrosure;
 import com.acrosure.AcrosureException;
 import com.acrosure.ApplicationCreateForm;
+import com.acrosure.ApplicationQuery;
+import com.acrosure.resource.ApplicationList;
 import com.acrosure.resource.Package;
 import com.acrosure.resource.Application;
 import com.acrosure.resource.ApplicationStatus;
@@ -27,7 +29,7 @@ class CARIntegrationTest {
 
     @BeforeAll
     void init() {
-        client = new Acrosure("tokn_sample_secret", "http://localhost:8000");
+        client = new Acrosure("tokn_sample_secret", "https://api.phantompage.com");
         mapper = new ObjectMapper();
         mapper.setPropertyNamingStrategy(new PropertyNamingStrategy.SnakeCaseStrategy());
 
@@ -89,6 +91,23 @@ class CARIntegrationTest {
             application = client.application().get(id);
 
             assertEquals(application.getId(), id);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail();
+        } catch (AcrosureException e) {
+            System.out.println(e.getMessage() + ", " + e.getStatusCode());
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    void List_ByDefault_ReturnsApplicationsWithPagination() {
+        try {
+//            ApplicationQuery query = new ApplicationQuery();
+            ApplicationList applicationList = client.application().list(null);
+
+            assertTrue(applicationList.getData().length > 0);
         } catch (IOException e) {
             e.printStackTrace();
             fail();
