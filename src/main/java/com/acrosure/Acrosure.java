@@ -4,11 +4,11 @@ public class Acrosure {
     private final ApplicationManager applicationManager;
 
     public Acrosure(String token) {
-        this(new OkHttpClient(token));
+        this(token, "https://api.acrosure.com");
     }
 
-    public Acrosure(HttpClient httpClient) {
-        applicationManager = new ApplicationManager(httpClient);
+    public Acrosure(String token, String host) {
+        applicationManager = new ApplicationManager(new OkHttpClient(token, host));
     }
 
     public ApplicationManager applications() {

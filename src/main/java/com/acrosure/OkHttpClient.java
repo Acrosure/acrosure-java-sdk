@@ -18,10 +18,6 @@ public class OkHttpClient implements HttpClient {
     private final okhttp3.OkHttpClient httpClient;
     private final ObjectMapper mapper;
 
-    public OkHttpClient(String token) {
-        this(token, "https://api.phantompage.com");
-    }
-
     public OkHttpClient(String token, String host) {
         this.TOKEN = token;
         this.HOST = host;

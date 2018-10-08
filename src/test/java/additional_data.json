@@ -55,11 +55,11 @@
       "postal_code": "10900"
     }
   },
-  "project_effective_date": "2018-09-06T00:00:00+07:00",
-  "project_expiry_date": "2019-09-06T00:00:00+07:00",
+  "project_effective_date": "2018-09-06",
+  "project_expiry_date": "2019-09-06",
   "project_duration": 365,
   "warranty_duration": 5,
-  "warranty_expiry_date": "0001-01-01T00:00:00Z",
+  "warranty_expiry_date": "0001-01-01",
   "payment_type": "ONLINE",
   "policy_code": "",
   "files": null
