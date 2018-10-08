@@ -11,7 +11,7 @@ public class Acrosure {
         applicationManager = new ApplicationManager(new OkHttpClient(token, host));
     }
 
-    public ApplicationManager applications() {
+    public ApplicationManager application() {
         return applicationManager;
     }
 }
