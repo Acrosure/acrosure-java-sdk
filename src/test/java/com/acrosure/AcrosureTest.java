@@ -1,20 +1,17 @@
 package com.acrosure;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 public class AcrosureTest {
 
     @Test
-    public void applications_byDefault_returnsApplicationManager() {
+    public void Application_ByDefault_ReturnsApplicationManager() {
         Acrosure acrosure = new Acrosure("some_token");
 
-        ApplicationManager manager = acrosure.applications();
+        ApplicationManager manager = acrosure.application();
 
         assertThat(manager, instanceOf(ApplicationManager.class));
     }
