@@ -1,5 +1,6 @@
 package com.acrosure;
 
+import com.acrosure.resource.ApplicationSource;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.node.ObjectNode;

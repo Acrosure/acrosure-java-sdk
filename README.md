@@ -41,7 +41,7 @@ obj.put("countries", new JSONArray());
 Then create an application
 
 ```Java
-import com.acrosure.Application;
+import com.acrosure.resource.Application;
 
 // ...
 

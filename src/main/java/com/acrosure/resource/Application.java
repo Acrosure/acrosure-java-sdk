@@ -1,4 +1,4 @@
-package com.acrosure;
+package com.acrosure.resource;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -237,7 +237,7 @@ public class Application {
     }
 
     /** copy method */
-    Application copy(Application origin) {
+    public Application copy(Application origin) {
         this.applicationNo = origin.applicationNo;
         this.createdAt = origin.createdAt;
         this.duty = origin.duty;

@@ -1,5 +1,8 @@
 package com.acrosure;
 
+import com.acrosure.resource.Application;
+import com.acrosure.resource.Package;
+import com.acrosure.resource.Policy;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;

@@ -1,4 +1,4 @@
-package com.acrosure;
+package com.acrosure.resource;
 
 public enum PolicyStatus {
     COMPLETED("COMPLETED"),

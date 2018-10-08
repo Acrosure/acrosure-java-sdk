@@ -1,7 +1,11 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.acrosure.*;
-import com.acrosure.Package;
+import com.acrosure.Acrosure;
+import com.acrosure.AcrosureException;
+import com.acrosure.ApplicationCreateForm;
+import com.acrosure.resource.Package;
+import com.acrosure.resource.Application;
+import com.acrosure.resource.ApplicationStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.node.ObjectNode;
