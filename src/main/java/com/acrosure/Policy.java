@@ -14,8 +14,10 @@ public class Policy {
     private final String insurerPolicyCode;
     private final String insurerPolicyUrl;
     private final String policyUrl;
-    private final double amount;
-    private final double amountWithTax;
+    private final double netPremium;
+    private final double duty;
+    private final double vat;
+    private final double grossPremium;
     private final PolicyStatus status;
     private final String insurerId;
     private final String firstName;
@@ -47,8 +49,10 @@ public class Policy {
             @JsonProperty("insurer_policy_code") String insurerPolicyCode,
             @JsonProperty("insurer_policy_url") String insurerPolicyUrl,
             @JsonProperty("policy_url") String policyUrl,
-            @JsonProperty("amount") double amount,
-            @JsonProperty("amount_with_tax") double amountWithTax,
+            @JsonProperty("net_premium") double netPremium,
+            @JsonProperty("duty") double duty,
+            @JsonProperty("vat") double vat,
+            @JsonProperty("gross_premium") double grossPremium,
             @JsonProperty("status") PolicyStatus status,
             @JsonProperty("insurer_id") String insurerId,
             @JsonProperty("first_name") String firstName,
@@ -77,8 +81,10 @@ public class Policy {
         this.insurerPolicyCode = insurerPolicyCode;
         this.insurerPolicyUrl = insurerPolicyUrl;
         this.policyUrl = policyUrl;
-        this.amount = amount;
-        this.amountWithTax = amountWithTax;
+        this.netPremium = netPremium;
+        this.duty = duty;
+        this.vat = vat;
+        this.grossPremium = grossPremium;
         this.status = status;
         this.insurerId = insurerId;
         this.firstName = firstName;
@@ -127,12 +133,20 @@ public class Policy {
         return policyUrl;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getNetPremium() {
+        return netPremium;
     }
 
-    public double getAmountWithTax() {
-        return amountWithTax;
+    public double getDuty() {
+        return duty;
+    }
+
+    public double getVat() {
+        return vat;
+    }
+
+    public double getGrossPremium() {
+        return grossPremium;
     }
 
     public PolicyStatus getStatus() {
@@ -232,8 +246,8 @@ public class Policy {
                 ", insurerPolicyCode='" + insurerPolicyCode + '\'' +
                 ", insurerPolicyUrl='" + insurerPolicyUrl + '\'' +
                 ", policyUrl='" + policyUrl + '\'' +
-                ", amount=" + amount +
-                ", amountWithTax=" + amountWithTax +
+                ", netPremium=" + netPremium +
+                ", grossPremium=" + grossPremium +
                 ", status=" + status +
                 ", insurerId='" + insurerId + '\'' +
                 ", firstName='" + firstName + '\'' +

@@ -15,15 +15,16 @@ public class Application {
     private String productId;
     private String applicationNo;
     private ApplicationStatus status;
-    private final ApplicationSource source = ApplicationSource.PARTNER;
+    private ApplicationSource source;
     private String userId;
     private String teamId;
     private boolean paid;
+    private String packageCode;
     private double netPremium;
     private double grossPremium;
     private double vat;
     private double duty;
-    private ApplicationPackageData packageData;
+    private Package packageData;
     private String[] policyIds;
     private ErrorField[] errorFields;
     private String errorMessage;
@@ -38,7 +39,6 @@ public class Application {
     private String ref1;
     private String ref2;
     private String ref3;
-    private String packageCode;
     private String groupPolicyId;
 
     @JsonCreator
@@ -47,6 +47,7 @@ public class Application {
             @JsonProperty("product_id") String productId,
             @JsonProperty("application_no") String applicationNo,
             @JsonProperty("status") ApplicationStatus status,
+            @JsonProperty("source") ApplicationSource source,
             @JsonProperty("user_id") String userId,
             @JsonProperty("team_id") String teamId,
             @JsonProperty("paid") boolean paid,
@@ -54,7 +55,7 @@ public class Application {
             @JsonProperty("gross_premium") double grossPremium,
             @JsonProperty("vat") double vat,
             @JsonProperty("duty") double duty,
-            @JsonProperty("package_data") ApplicationPackageData packageData,
+            @JsonProperty("package_data") Package packageData,
             @JsonProperty("policy_ids") String[] policyIds,
             @JsonProperty("error_fields") ErrorField[] errorFields,
             @JsonProperty("error_message") String errorMessage,
@@ -73,6 +74,7 @@ public class Application {
         this.productId = productId;
         this.applicationNo = applicationNo;
         this.status = status;
+        this.source = source;
         this.userId = userId;
         this.teamId = teamId;
         this.paid = paid;
@@ -145,7 +147,7 @@ public class Application {
         return duty;
     }
 
-    public ApplicationPackageData getPackageData() {
+    public Package getPackageData() {
         return packageData;
     }
 
@@ -230,10 +232,6 @@ public class Application {
         this.ref3 = ref3;
     }
 
-    public void setPackageCode(String packageCode) {
-        this.packageCode = packageCode;
-    }
-
     public void setGroupPolicyId(String groupPolicyId) {
         this.groupPolicyId = groupPolicyId;
     }
@@ -246,6 +244,7 @@ public class Application {
         this.errorFields = origin.errorFields;
         this.errorMessage = origin.errorMessage;
         this.expiredAt = origin.expiredAt;
+        this.packageCode = origin.packageCode;
         this.grossPremium = origin.grossPremium;
         this.netPremium = origin.netPremium;
         this.packageData = origin.packageData;
