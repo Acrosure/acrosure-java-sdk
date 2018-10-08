@@ -100,6 +100,35 @@ class CARIntegrationTest {
     }
 
     @Test
+    void GetPackage_ByDefault_ReturnsPackage() {
+        try {
+            if (application.getPackageCode().isEmpty()) {
+                ApplicationCreateForm applicationCreateForm = new ApplicationCreateForm();
+                applicationCreateForm.setProductId("prod_contractor");
+                ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataFile);
+                applicationCreateForm.setBasicData(basicData);
+                application = client.application().create(applicationCreateForm);
+                packages = client.application().getPackages(application);
+                client.application().selectPackage(application, packages[0]);
+            }
+
+            Package aPackage = client.application().getPackage(application);
+
+            assertAll("Package",
+                    () -> assertEquals(packages[0].getPackageCode(), aPackage.getPackageCode()),
+                    () -> assertEquals(aPackage.getPackageCode(), application.getPackageCode()),
+                    () -> assertEquals(application.getPackageCode(), application.getPackageData().getPackageCode()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail();
+        } catch (AcrosureException e) {
+            System.out.println(e.getMessage() + ", " + e.getStatusCode());
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
     void GetPackages_ByDefault_ReturnsPackages() {
         try {
             if (application.getStatus() == ApplicationStatus.INITIAL) {

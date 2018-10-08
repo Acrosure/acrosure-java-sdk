@@ -62,6 +62,15 @@ public class ApplicationManager {
         return application.copy(origin);
     }
 
+    public Package getPackage(Application application) throws IOException, AcrosureException {
+        ObjectNode requestPayload = mapper.createObjectNode();
+
+        requestPayload.put("application_id", application.getId());
+        ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.GET_PACKAGE.toString(), requestPayload);
+
+        return mapper.treeToValue(responseData, Package.class);
+    }
+
     public Package[] getPackages(Application application) throws IOException, AcrosureException {
         ObjectNode requestPayload = mapper.createObjectNode();
 
@@ -108,12 +117,12 @@ public class ApplicationManager {
 
     private enum Methods {
         GET("get"),
+        GET_PACKAGE("get-package"),
         GET_PACKAGES("get-packages"),
         SELECT_PACKAGE("select-package"),
         CREATE("create"),
         UPDATE("update"),
         SUBMIT("submit"),
-        APPROVE("approve"),
         CONFIRM("confirm");
 
         private final String method;
