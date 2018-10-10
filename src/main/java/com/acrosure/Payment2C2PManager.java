@@ -46,7 +46,7 @@ public class Payment2C2PManager {
         requestPayload.put("frontend_url", frontEndUrl);
         ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.GET_HASH.toString(), requestPayload);
 
-        return mapper.treeToValue(responseData, PaymentFormData.class);
+        return mapper.treeToValue(responseData.get("data"), PaymentFormData.class);
     }
 
     private enum Methods {
