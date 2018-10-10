@@ -3,6 +3,7 @@ package com.acrosure;
 public class Acrosure {
     private final ApplicationManager applicationManager;
     private final ProductManager productManager;
+    private final PolicyManager policyManager;
 
     public Acrosure(String token) {
         this(token, "https://api.acrosure.com");
@@ -12,6 +13,7 @@ public class Acrosure {
         OkHttpClient client = new OkHttpClient(token, host);
         applicationManager = new ApplicationManager(client);
         productManager = new ProductManager(client);
+        policyManager = new PolicyManager(client);
     }
 
     public ApplicationManager application() {
@@ -20,5 +22,9 @@ public class Acrosure {
 
     public ProductManager product() {
         return productManager;
+    }
+
+    public PolicyManager policy() {
+        return policyManager;
     }
 }
