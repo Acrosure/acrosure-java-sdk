@@ -2,10 +2,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.acrosure.Acrosure;
 import com.acrosure.AcrosureException;
-import com.acrosure.ApplicationCreateForm;
-import com.acrosure.ApplicationQuery;
 import com.acrosure.resource.*;
-import com.acrosure.resource.Package;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,7 +17,6 @@ import java.io.IOException;
 class ProductIntegrationTest {
     private Acrosure client;
     private ObjectMapper mapper;
-    private Package[] packages;
 
     @BeforeAll
     void init() {
