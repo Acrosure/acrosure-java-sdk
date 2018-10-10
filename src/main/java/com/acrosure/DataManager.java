@@ -17,7 +17,7 @@ public class DataManager {
 
     DataManager(HttpClient httpClient) {
         this.httpClient = httpClient;
-        this.METHOD_GROUP = "teams";
+        this.METHOD_GROUP = "data";
         this.mapper = new ObjectMapper();
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -26,12 +26,12 @@ public class DataManager {
         mapper.setDateFormat(df);
     }
 
-    public Data get(DataGetForm form) throws IOException, AcrosureException {
+    public Data[] get(DataGetForm form) throws IOException, AcrosureException {
         ObjectNode requestPayload = mapper.valueToTree(form);
 
         ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, DataManager.Methods.GET.toString(), requestPayload);
 
-        return mapper.treeToValue(responseData.get("data"), Data.class);
+        return mapper.treeToValue(responseData.get("data"), Data[].class);
     }
 
     private enum Methods {
