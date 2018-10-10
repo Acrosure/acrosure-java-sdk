@@ -29,4 +29,13 @@ public class File {
     public String getSignedUrl() {
         return signedUrl;
     }
+
+    @Override
+    public String toString() {
+        return "File{" +
+                "title='" + title + '\'' +
+                ", url='" + url + '\'' +
+                ", signedUrl='" + signedUrl + '\'' +
+                '}';
+    }
 }

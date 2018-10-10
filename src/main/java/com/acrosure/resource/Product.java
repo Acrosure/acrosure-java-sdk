@@ -94,4 +94,22 @@ public class Product {
     public ObjectNode getConfig() {
         return config;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", insurerProductCode='" + insurerProductCode + '\'' +
+                ", handlerId='" + handlerId + '\'' +
+                ", formItems=" + formItems +
+                ", sampleFormData=" + sampleFormData +
+                ", language='" + language + '\'' +
+                ", handlerOptions=" + handlerOptions +
+                ", completeProcess='" + completeProcess + '\'' +
+                ", isFormAvailable=" + isFormAvailable +
+                ", config=" + config +
+                '}';
+    }
 }

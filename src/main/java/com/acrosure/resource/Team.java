@@ -3,6 +3,8 @@ package com.acrosure.resource;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
+
 public class Team {
     private String id;
     private String companyName;
@@ -77,5 +79,21 @@ public class Team {
 
     public User[] getUsers() {
         return users;
+    }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "id='" + id + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", callbackUrl='" + callbackUrl + '\'' +
+                ", enableProduction=" + enableProduction +
+                ", isInsurer=" + isInsurer +
+                ", agentCode='" + agentCode + '\'' +
+                ", policyExposed=" + policyExposed +
+                ", appDataConcealed=" + appDataConcealed +
+                ", logoFile=" + logoFile +
+                ", users=" + Arrays.toString(users) +
+                '}';
     }
 }
