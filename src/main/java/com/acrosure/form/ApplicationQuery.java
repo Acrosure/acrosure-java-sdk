@@ -1,4 +1,4 @@
-package com.acrosure;
+package com.acrosure.form;
 
 public class ApplicationQuery {
     private long offset;

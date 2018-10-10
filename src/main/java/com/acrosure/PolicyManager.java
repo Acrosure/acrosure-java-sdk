@@ -1,5 +1,6 @@
 package com.acrosure;
 
+import com.acrosure.form.PolicyQuery;
 import com.acrosure.resource.*;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

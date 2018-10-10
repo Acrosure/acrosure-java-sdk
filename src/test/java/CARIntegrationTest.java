@@ -2,8 +2,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.acrosure.Acrosure;
 import com.acrosure.AcrosureException;
-import com.acrosure.ApplicationCreateForm;
-import com.acrosure.ApplicationQuery;
+import com.acrosure.form.ApplicationCreateForm;
+import com.acrosure.form.ApplicationQuery;
 import com.acrosure.resource.ApplicationList;
 import com.acrosure.resource.Package;
 import com.acrosure.resource.Application;

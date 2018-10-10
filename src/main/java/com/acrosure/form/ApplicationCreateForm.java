@@ -1,4 +1,4 @@
-package com.acrosure;
+package com.acrosure.form;
 
 import com.acrosure.resource.ApplicationSource;
 import com.fasterxml.jackson.annotation.JsonCreator;

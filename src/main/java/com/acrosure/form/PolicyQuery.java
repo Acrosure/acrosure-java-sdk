@@ -1,4 +1,4 @@
-package com.acrosure;
+package com.acrosure.form;
 
 public class PolicyQuery {
     private long offset;
