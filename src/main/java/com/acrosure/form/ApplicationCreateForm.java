@@ -17,28 +17,13 @@ public class ApplicationCreateForm {
     private String ref2;
     private String ref3;
 
-    public ApplicationCreateForm() {}
-
-    @JsonCreator
-    public ApplicationCreateForm(
-            @JsonProperty("product_id") String productId,
-            @JsonProperty("basic_data") ObjectNode basicData,
-            @JsonProperty("package_options") ObjectNode packageOptions,
-            @JsonProperty("additional_data") ObjectNode additionalData,
-            @JsonProperty("package_code") String packageCode,
-            @JsonProperty("group_policy_id") String groupPolicyId,
-            @JsonProperty("ref1") String ref1,
-            @JsonProperty("ref2") String ref2,
-            @JsonProperty("ref3") String ref3) {
-        this.productId = productId;
-        this.basicData = basicData;
-        this.packageOptions = packageOptions;
-        this.additionalData = additionalData;
-        this.packageCode = packageCode;
-        this.groupPolicyId = groupPolicyId;
-        this.ref1 = ref1;
-        this.ref2 = ref2;
-        this.ref3 = ref3;
+    public ApplicationCreateForm() {
+        this.productId = "";
+        this.packageCode = "";
+        this.groupPolicyId = "";
+        this.ref1 = "";
+        this.ref2 = "";
+        this.ref3 = "";
     }
 
     public String getProductId() {
