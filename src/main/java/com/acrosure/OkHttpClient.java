@@ -50,10 +50,12 @@ public class OkHttpClient implements HttpClient {
             ObjectNode param) throws JsonProcessingException {
         String body = mapper.writeValueAsString(param);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), body);
+        String url = HOST + "/" + methodGroup + "/" + method;
+        String header = "Bearer " + this.TOKEN;
 
         return new Request.Builder()
-                .url(HOST + "/" + methodGroup + "/" + method)
-                .addHeader("Authorization", "Bearer " + this.TOKEN)
+                .url(url)
+                .addHeader("Authorization", header)
                 .post(requestBody).build();
     }
 }
