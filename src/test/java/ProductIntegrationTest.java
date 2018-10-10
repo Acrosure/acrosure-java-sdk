@@ -3,8 +3,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.acrosure.Acrosure;
 import com.acrosure.AcrosureException;
 import com.acrosure.resource.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,14 +14,11 @@ import java.io.IOException;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProductIntegrationTest {
     private Acrosure client;
-    private ObjectMapper mapper;
 
     @BeforeAll
     void init() {
         client = new Acrosure("tokn_sample_secret", "https://api.phantompage.com");
 //        client = new Acrosure("sandbox_tokn_1X9gTzB1R80MAq0F", "http://localhost:8000");
-        mapper = new ObjectMapper();
-        mapper.setPropertyNamingStrategy(new PropertyNamingStrategy.SnakeCaseStrategy());
     }
 
     @ParameterizedTest
