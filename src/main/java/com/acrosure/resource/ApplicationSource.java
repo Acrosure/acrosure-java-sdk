@@ -1,8 +1,11 @@
 package com.acrosure.resource;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum ApplicationSource {
     PARTNER("PARTNER"),
-    CUSTOMER("CUSTOMER");
+    CUSTOMER("CUSTOMER"),
+    NONE("");
 
     private final String source;
 
@@ -12,6 +15,11 @@ public enum ApplicationSource {
 
     @Override
     public String toString() {
+        return source;
+    }
+
+    @JsonValue
+    public String getSource() {
         return source;
     }
 }

@@ -1,5 +1,7 @@
 package com.acrosure.resource;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum PolicyStatus {
     COMPLETED("COMPLETED"),
     INCOMPLETED("INCOMPLETED"),
@@ -14,6 +16,11 @@ public enum PolicyStatus {
 
     @Override
     public String toString() {
+        return status;
+    }
+
+    @JsonValue
+    public String getStatus() {
         return status;
     }
 }
