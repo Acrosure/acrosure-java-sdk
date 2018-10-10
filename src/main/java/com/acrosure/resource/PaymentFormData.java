@@ -40,7 +40,7 @@ public class PaymentFormData {
     private String chargeNextDate;
     private String chargeOnDate;
     private String statementDescriptor;
-    private String useStoredcardOnly;
+    private String useStoredCardOnly;
     private String tokenizeWithoutAuthorization;
     private String productCode;
     private String ippPeriodFilter;
@@ -84,7 +84,7 @@ public class PaymentFormData {
             @JsonProperty("charge_next_date") String chargeNextDate,
             @JsonProperty("charge_on_date") String chargeOnDate,
             @JsonProperty("statement_descriptor") String statementDescriptor,
-            @JsonProperty("use_storedcard_only") String useStoredcardOnly,
+            @JsonProperty("use_storedcard_only") String useStoredCardOnly,
             @JsonProperty("tokenize_without_authorization") String tokenizeWithoutAuthorization,
             @JsonProperty("product_code") String productCode,
             @JsonProperty("ipp_period_filter") String ippPeriodFilter,
@@ -125,7 +125,7 @@ public class PaymentFormData {
         this.chargeNextDate = chargeNextDate;
         this.chargeOnDate = chargeOnDate;
         this.statementDescriptor = statementDescriptor;
-        this.useStoredcardOnly = useStoredcardOnly;
+        this.useStoredCardOnly = useStoredCardOnly;
         this.tokenizeWithoutAuthorization = tokenizeWithoutAuthorization;
         this.productCode = productCode;
         this.ippPeriodFilter = ippPeriodFilter;
@@ -276,8 +276,8 @@ public class PaymentFormData {
         return statementDescriptor;
     }
 
-    public String getUseStoredcardOnly() {
-        return useStoredcardOnly;
+    public String getUseStoredCardOnly() {
+        return useStoredCardOnly;
     }
 
     public String getTokenizeWithoutAuthorization() {
@@ -335,7 +335,7 @@ public class PaymentFormData {
                 ", chargeNextDate='" + chargeNextDate + '\'' +
                 ", chargeOnDate='" + chargeOnDate + '\'' +
                 ", statementDescriptor='" + statementDescriptor + '\'' +
-                ", useStoredcardOnly='" + useStoredcardOnly + '\'' +
+                ", useStoredCardOnly='" + useStoredCardOnly + '\'' +
                 ", tokenizeWithoutAuthorization='" + tokenizeWithoutAuthorization + '\'' +
                 ", productCode='" + productCode + '\'' +
                 ", ippPeriodFilter='" + ippPeriodFilter + '\'' +
