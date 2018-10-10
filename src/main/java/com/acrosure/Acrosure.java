@@ -5,6 +5,7 @@ public class Acrosure {
     private final ProductManager productManager;
     private final PolicyManager policyManager;
     private final TeamManager teamManager;
+    private final DataManager dataManager;
 
     public Acrosure(String token) {
         this(token, "https://api.acrosure.com");
@@ -16,6 +17,7 @@ public class Acrosure {
         productManager = new ProductManager(client);
         policyManager = new PolicyManager(client);
         teamManager = new TeamManager(client);
+        dataManager = new DataManager(client);
     }
 
     public ApplicationManager application() {
@@ -32,5 +34,9 @@ public class Acrosure {
 
     public TeamManager team() {
         return teamManager;
+    }
+
+    public DataManager data() {
+        return dataManager;
     }
 }
