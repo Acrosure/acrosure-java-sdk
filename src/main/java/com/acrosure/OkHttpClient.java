@@ -31,6 +31,8 @@ public class OkHttpClient implements HttpClient {
         Call call = httpClient.newCall(request);
         Response response = call.execute();
         int statusCode = response.code();
+//        String responseString = response.body().string();
+//        System.out.println(responseString);
         ObjectNode jsonTreeResponse = (ObjectNode) mapper.readTree(response.body().byteStream());
 
 
@@ -39,7 +41,7 @@ public class OkHttpClient implements HttpClient {
         if (statusCode != 200 || !jsonTreeResponse.get("status").asText().equals("ok"))
             throw new AcrosureException(jsonTreeResponse.get("message").asText(), statusCode);
 
-        return jsonTreeResponse.get("data");
+        return jsonTreeResponse;
     }
 
     private Request buildHttpRequest(

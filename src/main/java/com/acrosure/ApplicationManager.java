@@ -35,13 +35,13 @@ public class ApplicationManager {
         requestPayload.put("application_id", applicationId);
         ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.GET.toString(), requestPayload);
 
-        return mapper.treeToValue(responseData, Application.class);
+        return mapper.treeToValue(responseData.get("data"), Application.class);
     }
 
     public ApplicationList list(ApplicationQuery query) throws IOException, AcrosureException {
         ObjectNode requestPayload = mapper.valueToTree(query);
 
-        ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.GET.toString(), requestPayload);
+        ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.LIST.toString(), requestPayload);
 
         return mapper.treeToValue(responseData, ApplicationList.class);
     }
@@ -58,7 +58,7 @@ public class ApplicationManager {
         ObjectNode requestPayload = mapper.valueToTree(applicationCreateForm);
         ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.CREATE.toString(), requestPayload);
 
-        return mapper.treeToValue(responseData, Application.class);
+        return mapper.treeToValue(responseData.get("data"), Application.class);
     }
 
     public Application update(Application application) throws IOException, AcrosureException {
@@ -66,7 +66,7 @@ public class ApplicationManager {
         ObjectNode requestPayload = mapper.valueToTree(applicationUpdateForm);
         ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.UPDATE.toString(), requestPayload);
 
-        Application origin = mapper.treeToValue(responseData, Application.class);
+        Application origin = mapper.treeToValue(responseData.get("data"), Application.class);
 
         return application.copy(origin);
     }
@@ -77,16 +77,16 @@ public class ApplicationManager {
         requestPayload.put("application_id", application.getId());
         ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.GET_PACKAGE.toString(), requestPayload);
 
-        return mapper.treeToValue(responseData, Package.class);
+        return mapper.treeToValue(responseData.get("data"), Package.class);
     }
 
     public Package[] getPackages(Application application) throws IOException, AcrosureException {
         ObjectNode requestPayload = mapper.createObjectNode();
 
         requestPayload.put("application_id", application.getId());
-        ArrayNode responseData = (ArrayNode) httpClient.call(METHOD_GROUP, Methods.GET_PACKAGES.toString(), requestPayload);
+        ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.GET_PACKAGES.toString(), requestPayload);
 
-        return mapper.treeToValue(responseData, Package[].class);
+        return mapper.treeToValue(responseData.get("data"), Package[].class);
     }
 
     public Application selectPackage(Application application, Package mPackage) throws  IOException, AcrosureException {
@@ -96,7 +96,7 @@ public class ApplicationManager {
         requestPayload.put("package_code", mPackage.getPackageCode());
         ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.SELECT_PACKAGE.toString(), requestPayload);
 
-        Application origin = mapper.treeToValue(responseData, Application.class);
+        Application origin = mapper.treeToValue(responseData.get("data"), Application.class);
 
         return application.copy(origin);
     }
@@ -107,7 +107,7 @@ public class ApplicationManager {
         requestPayload.put("application_id", application.getId());
         ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.SUBMIT.toString(), requestPayload);
 
-        Application origin = mapper.treeToValue(responseData, Application.class);
+        Application origin = mapper.treeToValue(responseData.get("data"), Application.class);
 
         return application.copy(origin);
     }
@@ -116,16 +116,17 @@ public class ApplicationManager {
         ObjectNode requestPayload = (ObjectNode) mapper.readTree("{}");
 
         requestPayload.put("application_id", application.getId());
-        ArrayNode responseData = (ArrayNode) httpClient.call(METHOD_GROUP, Methods.CONFIRM.toString(), requestPayload);
+        ObjectNode responseData = (ObjectNode) httpClient.call(METHOD_GROUP, Methods.CONFIRM.toString(), requestPayload);
 
         Application origin = get(application.getId());
         application.copy(origin);
 
-        return mapper.treeToValue(responseData, Policy[].class);
+        return mapper.treeToValue(responseData.get("data"), Policy[].class);
     }
 
     private enum Methods {
         GET("get"),
+        LIST("list"),
         GET_PACKAGE("get-package"),
         GET_PACKAGES("get-packages"),
         SELECT_PACKAGE("select-package"),
