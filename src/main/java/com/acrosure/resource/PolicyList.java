@@ -6,18 +6,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 
 public class PolicyList {
-    private Application[] data;
+    private Policy[] data;
     private Pagination pagination;
 
     @JsonCreator
     public PolicyList(
-            @JsonProperty("data") Application[] data,
+            @JsonProperty("data") Policy[] data,
             @JsonProperty("pagination") Pagination pagination) {
         this.data = data;
         this.pagination = pagination;
     }
 
-    public Application[] getData() {
+    public Policy[] getData() {
         return data;
     }
 
