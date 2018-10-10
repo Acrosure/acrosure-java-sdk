@@ -12,7 +12,14 @@ public class ApplicationQuery {
     private String query;
     private boolean partialMatch;
 
-    public ApplicationQuery() {}
+    public ApplicationQuery() {
+        this.orderBy = "";
+        this.status = "";
+        this.source = "";
+        this.productID = "";
+        this.teamID = "";
+        this.query = "";
+    }
 
     public long getOffset() {
         return offset;

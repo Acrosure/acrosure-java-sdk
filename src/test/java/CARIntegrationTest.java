@@ -30,6 +30,7 @@ class CARIntegrationTest {
     @BeforeAll
     void init() {
         client = new Acrosure("tokn_sample_secret", "https://api.phantompage.com");
+//        client = new Acrosure("sandbox_tokn_1X9gTzB1R80MAq0F", "http://localhost:8000");
         mapper = new ObjectMapper();
         mapper.setPropertyNamingStrategy(new PropertyNamingStrategy.SnakeCaseStrategy());
 
@@ -104,8 +105,10 @@ class CARIntegrationTest {
     @Test
     void List_ByDefault_ReturnsApplicationsWithPagination() {
         try {
-//            ApplicationQuery query = new ApplicationQuery();
-            ApplicationList applicationList = client.application().list(null);
+            ApplicationQuery query = new ApplicationQuery();
+            ApplicationList applicationList = client.application().list(query);
+
+            System.out.println(applicationList.getPagination().getTotal());
 
             assertTrue(applicationList.getData().length > 0);
         } catch (IOException e) {
