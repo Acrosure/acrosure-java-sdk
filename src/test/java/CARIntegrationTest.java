@@ -15,15 +15,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CARIntegrationTest {
     private Acrosure client;
     private ObjectMapper mapper;
-    private File basicDataFile;
-    private File additionalDataFile;
+    private URL basicDataUrl;
+    private URL AdditionalDataUrl;
     private Application application;
     private Package[] packages;
 
@@ -45,8 +45,8 @@ class CARIntegrationTest {
             fail();
         }
 
-        basicDataFile = new File("/home/kohpai/IdeaProjects/acrosure-java-sdk/src/test/java/basic_data.json");
-        additionalDataFile = new File("/home/kohpai/IdeaProjects/acrosure-java-sdk/src/test/java/additional_data.json");
+        basicDataUrl = this.getClass().getClassLoader().getResource("basic_data.json");
+        AdditionalDataUrl = this.getClass().getClassLoader().getResource("additional_data.json");
     }
 
     @Test
@@ -70,7 +70,7 @@ class CARIntegrationTest {
         applicationCreateForm.setProductId("prod_contractor");
 
         try {
-            ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataFile);
+            ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataUrl);
             applicationCreateForm.setBasicData(basicData);
             application = client.application().create(applicationCreateForm);
 
@@ -127,7 +127,7 @@ class CARIntegrationTest {
             if (application.getPackageCode().isEmpty()) {
                 ApplicationCreateForm applicationCreateForm = new ApplicationCreateForm();
                 applicationCreateForm.setProductId("prod_contractor");
-                ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataFile);
+                ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataUrl);
                 applicationCreateForm.setBasicData(basicData);
                 application = client.application().create(applicationCreateForm);
                 packages = client.application().getPackages(application);
@@ -156,7 +156,7 @@ class CARIntegrationTest {
             if (application.getStatus() == ApplicationStatus.INITIAL) {
                 ApplicationCreateForm applicationCreateForm = new ApplicationCreateForm();
                 applicationCreateForm.setProductId("prod_contractor");
-                ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataFile);
+                ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataUrl);
                 applicationCreateForm.setBasicData(basicData);
                 application = client.application().create(applicationCreateForm);
             }
@@ -179,7 +179,7 @@ class CARIntegrationTest {
             if (application.getStatus() != ApplicationStatus.PACKAGE_REQUIRED) {
                 ApplicationCreateForm applicationCreateForm = new ApplicationCreateForm();
                 applicationCreateForm.setProductId("prod_contractor");
-                ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataFile);
+                ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataUrl);
                 applicationCreateForm.setBasicData(basicData);
                 application = client.application().create(applicationCreateForm);
                 packages = client.application().getPackages(application);
@@ -210,14 +210,14 @@ class CARIntegrationTest {
             if (application.getStatus() != ApplicationStatus.DATA_REQUIRED) {
                 ApplicationCreateForm applicationCreateForm = new ApplicationCreateForm();
                 applicationCreateForm.setProductId("prod_contractor");
-                ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataFile);
+                ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataUrl);
                 applicationCreateForm.setBasicData(basicData);
                 application = client.application().create(applicationCreateForm);
                 packages = client.application().getPackages(application);
                 client.application().selectPackage(application, packages[0]);
             }
 
-            ObjectNode additionalData = (ObjectNode) mapper.readTree(additionalDataFile);
+            ObjectNode additionalData = (ObjectNode) mapper.readTree(AdditionalDataUrl);
             application.setAdditionalData(additionalData);
             client.application().update(application);
 
@@ -239,12 +239,12 @@ class CARIntegrationTest {
             if (application.getStatus() != ApplicationStatus.READY) {
                 ApplicationCreateForm applicationCreateForm = new ApplicationCreateForm();
                 applicationCreateForm.setProductId("prod_contractor");
-                ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataFile);
+                ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataUrl);
                 applicationCreateForm.setBasicData(basicData);
                 application = client.application().create(applicationCreateForm);
                 packages = client.application().getPackages(application);
                 client.application().selectPackage(application, packages[0]);
-                ObjectNode additionalData = (ObjectNode) mapper.readTree(additionalDataFile);
+                ObjectNode additionalData = (ObjectNode) mapper.readTree(AdditionalDataUrl);
                 application.setAdditionalData(additionalData);
                 client.application().update(application);
             }
