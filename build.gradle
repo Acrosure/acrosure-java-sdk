@@ -5,7 +5,7 @@ plugins {
 apply plugin: 'maven'
 
 group 'com.acrosure'
-version '0.2.1'
+version '0.2.3'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -30,6 +30,10 @@ dependencies {
 task newPom {
     pom {
         project {
+            name 'com.acrosure: acrosure-java-sdk'
+            description 'Java SDK for connecting with Acrosure Insurance Gateway'
+            url 'https://github.com/Acrosure/acrosure-java-sdk'
+
             licenses {
                 license {
                     name 'MIT License'
