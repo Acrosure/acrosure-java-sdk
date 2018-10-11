@@ -10,6 +10,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
+/**
+ * DataManager handles all the data specific requests.
+ * Right now there is only one operation: get.
+ */
 public class DataManager {
     private final HttpClient httpClient;
     private final String METHOD_GROUP;
@@ -26,6 +30,14 @@ public class DataManager {
         mapper.setDateFormat(df);
     }
 
+    /**
+     * Get data
+     *
+     * @param form                  an instance of form.DataGetForm
+     * @return                      array of instances of resource.Data
+     * @throws IOException          if there are some JSON-related operation errors
+     * @throws AcrosureException    if the server returns error(s)
+     */
     public Data[] get(DataGetForm form) throws IOException, AcrosureException {
         ObjectNode requestPayload = mapper.valueToTree(form);
 
