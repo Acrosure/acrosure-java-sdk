@@ -10,6 +10,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
+/**
+ * PolicyManager handles all the policy-related operations.
+ * This includes: get and list.
+ */
 public class PolicyManager {
     private final HttpClient httpClient;
     private final String METHOD_GROUP;
@@ -26,6 +30,14 @@ public class PolicyManager {
         mapper.setDateFormat(df);
     }
 
+    /**
+     * Get a policy
+     *
+     * @param policyId              policy ID
+     * @return                      an instance of resource.Policy
+     * @throws IOException          if there are some JSON-related operation errors
+     * @throws AcrosureException    if the server returns error(s)
+     */
     public Policy get(String policyId) throws IOException, AcrosureException {
         ObjectNode requestPayload = mapper.createObjectNode();
 
@@ -35,6 +47,14 @@ public class PolicyManager {
         return mapper.treeToValue(responseData.get("data"), Policy.class);
     }
 
+    /**
+     * Get a list of policies that associated with the token
+     *
+     * @param query                 an instance of form.PolicyQuery
+     * @return                      an instance of resource.PolicyList
+     * @throws IOException          if there are some JSON-related operation errors
+     * @throws AcrosureException    if the server returns error(s)
+     */
     public PolicyList list(PolicyQuery query) throws IOException, AcrosureException {
         ObjectNode requestPayload = mapper.valueToTree(query);
 
