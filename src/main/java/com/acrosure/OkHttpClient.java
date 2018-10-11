@@ -11,6 +11,7 @@ import okhttp3.RequestBody;
 import okhttp3.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 class OkHttpClient implements HttpClient {
     private final String TOKEN;
@@ -21,7 +22,11 @@ class OkHttpClient implements HttpClient {
     OkHttpClient(String token, String host) {
         this.TOKEN = token;
         this.HOST = host;
-        this.httpClient = new okhttp3.OkHttpClient.Builder().build();
+        this.httpClient = new okhttp3
+                .OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
         this.mapper = new ObjectMapper();
     }
 
