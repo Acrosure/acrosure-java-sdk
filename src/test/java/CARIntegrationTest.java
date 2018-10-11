@@ -16,7 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Properties;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CARIntegrationTest {
@@ -29,12 +31,17 @@ class CARIntegrationTest {
 
     @BeforeAll
     void init() {
-        client = new Acrosure("tokn_sample_secret", "https://api.phantompage.com");
-//        client = new Acrosure("sandbox_tokn_1X9gTzB1R80MAq0F", "http://localhost:8000");
+        Properties prop = new Properties();
+        InputStream configStream = this.getClass().getClassLoader().getResourceAsStream("config.properties");
+
         mapper = new ObjectMapper();
         mapper.setPropertyNamingStrategy(new PropertyNamingStrategy.SnakeCaseStrategy());
 
         try {
+            prop.load(configStream);
+            String token = prop.getProperty("secret_token");
+            String host = prop.getProperty("remote_host");
+            client = new Acrosure(token, host);
             application = client.application().create("prod_contractor");
         } catch (IOException e) {
             e.printStackTrace();

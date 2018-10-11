@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PolicyIntegrationTest {
@@ -16,8 +18,17 @@ class PolicyIntegrationTest {
 
     @BeforeAll
     void init() {
-        client = new Acrosure("tokn_sample_secret", "https://api.phantompage.com");
-//        client = new Acrosure("sandbox_tokn_1X9gTzB1R80MAq0F", "http://localhost:8000");
+        Properties prop = new Properties();
+        InputStream configStream = this.getClass().getClassLoader().getResourceAsStream("config.properties");
+        try {
+            prop.load(configStream);
+            String token = prop.getProperty("secret_token");
+            String host = prop.getProperty("remote_host");
+            client = new Acrosure(token, host);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail();
+        }
     }
 
     @Test
