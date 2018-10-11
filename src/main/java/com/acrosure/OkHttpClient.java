@@ -12,13 +12,13 @@ import okhttp3.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class OkHttpClient implements HttpClient {
+class OkHttpClient implements HttpClient {
     private final String TOKEN;
     private final String HOST;
     private final okhttp3.OkHttpClient httpClient;
     private final ObjectMapper mapper;
 
-    public OkHttpClient(String token, String host) {
+    OkHttpClient(String token, String host) {
         this.TOKEN = token;
         this.HOST = host;
         this.httpClient = new okhttp3.OkHttpClient.Builder().build();
