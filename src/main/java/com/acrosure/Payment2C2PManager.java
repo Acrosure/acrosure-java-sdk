@@ -11,12 +11,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 
+/**
+ * Payment2C2PManager handles all the payment-specific operations, but only through
+ * 2C2P gateway.
+ */
 public class Payment2C2PManager {
     private final HttpClient httpClient;
     private final String METHOD_GROUP;
     private final ObjectMapper mapper;
 
-    public Payment2C2PManager(HttpClient httpClient) {
+    Payment2C2PManager(HttpClient httpClient) {
         this.httpClient = httpClient;
         this.METHOD_GROUP = "payments/2c2p";
         this.mapper = new ObjectMapper();
@@ -27,18 +31,54 @@ public class Payment2C2PManager {
         mapper.setDateFormat(df);
     }
 
+    /**
+     * Get hash
+     *
+     * @param application           an instance of resource.Application
+     * @param frontEndUrl           an instance of URL
+     * @return                      an instance of resource.PaymentFormData
+     * @throws IOException          if there are some JSON-related operation errors
+     * @throws AcrosureException    if the server returns error(s)
+     */
     public PaymentFormData getHash(Application application, URL frontEndUrl) throws IOException, AcrosureException {
         return getHash(application.getId(), frontEndUrl.toString());
     }
 
+    /**
+     * Get hash
+     *
+     * @param applicationId         application ID
+     * @param frontEndUrl           an instance of URL
+     * @return                      an instance of resource.PaymentFormData
+     * @throws IOException          if there are some JSON-related operation errors
+     * @throws AcrosureException    if the server returns error(s)
+     */
     public PaymentFormData getHash(String applicationId, URL frontEndUrl) throws IOException, AcrosureException {
         return getHash(applicationId, frontEndUrl.toString());
     }
 
+    /**
+     * Get hash
+     *
+     * @param application           an instance of resource.Application
+     * @param frontEndUrl           url
+     * @return                      an instance of resource.PaymentFormData
+     * @throws IOException          if there are some JSON-related operation errors
+     * @throws AcrosureException    if the server returns error(s)
+     */
     public PaymentFormData getHash(Application application, String frontEndUrl) throws IOException, AcrosureException {
         return getHash(application.getId(), frontEndUrl);
     }
 
+    /**
+     * Get hash
+     *
+     * @param applicationId         application ID
+     * @param frontEndUrl           url
+     * @return                      an instance of resource.PaymentFormData
+     * @throws IOException          if there are some JSON-related operation errors
+     * @throws AcrosureException    if the server returns error(s)
+     */
     public PaymentFormData getHash(String applicationId, String frontEndUrl) throws IOException, AcrosureException {
         ObjectNode requestPayload = mapper.createObjectNode();
 
