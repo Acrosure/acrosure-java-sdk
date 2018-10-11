@@ -206,7 +206,7 @@ public class ApplicationManager {
      * Confirm an application
      *
      * @param application           an instance of resource.Application
-     * @return                      the confirmed application
+     * @return                      array of policies associated to the application
      * @throws IOException          if there are some JSON-related operation errors
      * @throws AcrosureException    if the server returns error(s)
      */

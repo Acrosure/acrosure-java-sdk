@@ -1,0 +1,64 @@
+{
+  "insured_information": {
+    "type": "1",
+    "title": "นาย",
+    "first_name": "มานะ",
+    "last_name": "มุ่งมั่น",
+    "organization_type": "",
+    "organization_name": "",
+    "organization_no": "",
+    "gender": "",
+    "id_card": "1489900087857",
+    "occupation_code": "99",
+    "occupation_name": "พนักงานบริษัท",
+    "branch_name": "",
+    "address": {
+      "address_no": "1",
+      "moo": "2",
+      "village": "วิลเลจ 3",
+      "lane": "ลาดพร้าว 4",
+      "street": "ลาดพร้าว",
+      "minor_district": "",
+      "subdistrict": "จอมพล",
+      "district": "จตุจักร",
+      "province": "กรุงเทพมหานคร",
+      "postal_code": "10900"
+    },
+    "phone": "0861234567",
+    "email": "customer@example.com",
+    "beneficiary_name": ""
+  },
+  "motor_information": {
+    "red_plate": false,
+    "license_no": "กม9999",
+    "license_province": "กรุงเทพมหานคร",
+    "chassis_no": "TT20180330000000",
+    "engine_no": "B20B3WP11644",
+    "body_type": "",
+    "color": "",
+    "gear_type": "",
+    "cc": 1500,
+    "total_seats": 0,
+    "weight": 0,
+    "accessories_information": ""
+  },
+  "named_driver_information": {
+    "driver1": {
+      "title": "นาย",
+      "first_name": "มานะ",
+      "last_name": "มุ่งมั่น",
+      "gender": "",
+      "id_card": "1489900087857",
+      "occupation_code": "",
+      "occupation_name": "",
+      "driver_card": {
+        "license_no": "12345678",
+        "license_type": "",
+        "issuer": "",
+        "issued_date": "0001-01-01",
+        "expired_date": "0001-01-01"
+      }
+    },
+    "driver2": null
+  }
+}
