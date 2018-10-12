@@ -2,7 +2,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.acrosure.Acrosure;
 import com.acrosure.AcrosureException;
-import com.acrosure.form.DataGetForm;
 import com.acrosure.resource.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,7 @@ class Payment2C2PIntegrationTest {
         InputStream configStream = this.getClass().getClassLoader().getResourceAsStream("config.properties");
         try {
             prop.load(configStream);
-            String token = prop.getProperty("secret_token");
+            String token = prop.getProperty("public_token");
             String host = prop.getProperty("remote_host");
             client = new Acrosure(token, host);
         } catch (IOException e) {

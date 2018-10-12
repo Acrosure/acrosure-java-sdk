@@ -8,6 +8,7 @@ import com.acrosure.resource.*;
 import com.acrosure.resource.Package;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -133,6 +134,7 @@ class MotorIntegrationTest {
                 ApplicationCreateForm applicationCreateForm = new ApplicationCreateForm();
                 applicationCreateForm.setProductId("prod_motor");
                 ObjectNode basicData = (ObjectNode) mapper.readTree(basicDataUrl);
+                ArrayNode nodes = basicData.putArray("test");
                 applicationCreateForm.setBasicData(basicData);
                 application = client.application().create(applicationCreateForm);
                 packages = client.application().getPackages(application);
