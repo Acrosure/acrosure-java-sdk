@@ -8,3 +8,4 @@ acrosure-java-sdk\.iml
 .env
 *~
 !.gitignore
+examples/SDKDemoUsingAndroid/app/src/main/res/raw/config\.properties

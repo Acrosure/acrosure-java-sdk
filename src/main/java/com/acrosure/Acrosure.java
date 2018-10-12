@@ -1,5 +1,12 @@
 package com.acrosure;
 
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Formatter;
+
 /**
  * Acrosure is the class that wraps the capabilities of Acrosure's
  * <a href="https://docs.acrosure.com/#getting-started">web APIs</a>. Each instance
@@ -14,6 +21,9 @@ package com.acrosure;
  * @author Acrosure Developer Team
  */
 public class Acrosure {
+    private static final String MAC_ALGORITHM = "HMACSHA256";
+    private Mac mac;
+    private final SecretKey key;
     private final ApplicationManager applicationManager;
     private final Payment2C2PManager payment2C2PManager;
     private final ProductManager productManager;
@@ -46,6 +56,15 @@ public class Acrosure {
         policyManager = new PolicyManager(client);
         teamManager = new TeamManager(client);
         dataManager = new DataManager(client);
+        key = new SecretKeySpec(token.getBytes(), MAC_ALGORITHM);
+
+        try {
+            mac = Mac.getInstance(MAC_ALGORITHM);
+            mac.init(key);
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            mac = null;
+            System.err.println(e.getMessage());
+        }
     }
 
     /**
@@ -88,5 +107,73 @@ public class Acrosure {
      */
     public DataManager data() {
         return dataManager;
+    }
+
+    /**
+     * Verifies received signature and data against the stored secret token
+     *
+     * @param signature                 received signature
+     * @param data                      received data
+     * @return                          <code>true</code> if the signature matches the one derived
+     *                                  from the data. Otherwise, <code>false</code>.
+     * @throws NoSuchAlgorithmException this shouldn't happen
+     */
+    public boolean verifySignature(String signature, String data) throws NoSuchAlgorithmException {
+        if (mac == null)
+            throw new NoSuchAlgorithmException(MAC_ALGORITHM + " couldn't be found");
+
+        byte[] bytesDerivedSignature = mac.doFinal(data.getBytes());
+        String derivedSignature = toHexString(bytesDerivedSignature);
+
+        return derivedSignature.equals(signature);
+    }
+
+    /**
+     * Verifies received signature and data against the stored secret token
+     *
+     * @param signature                 received signature
+     * @param data                      received data
+     * @return                          <code>true</code> if the signature matches the one derived
+     *                                  from the data. Otherwise, <code>false</code>.
+     * @throws NoSuchAlgorithmException this shouldn't happen
+     */
+    public boolean verifySignature(byte[] signature, String data) throws NoSuchAlgorithmException {
+        return verifySignature(new String(signature), data);
+    }
+
+    /**
+     * Verifies received signature and data against the stored secret token
+     *
+     * @param signature                 received signature
+     * @param data                      received data
+     * @return                          <code>true</code> if the signature matches the one derived
+     *                                  from the data. Otherwise, <code>false</code>.
+     * @throws NoSuchAlgorithmException this shouldn't happen
+     */
+    public boolean verifySignature(String signature, byte[] data) throws NoSuchAlgorithmException {
+        return verifySignature(signature, new String(data));
+    }
+
+    /**
+     * Verifies received signature and data against the stored secret token
+     *
+     * @param signature                 received signature
+     * @param data                      received data
+     * @return                          <code>true</code> if the signature matches the one derived
+     *                                  from the data. Otherwise, <code>false</code>.
+     * @throws NoSuchAlgorithmException this shouldn't happen
+     */
+    public boolean verifySignature(byte[] signature, byte[] data) throws NoSuchAlgorithmException {
+        return verifySignature(new String(signature), new String(data));
+    }
+
+    private static String toHexString(byte[] bytes) {
+        Formatter formatter = new Formatter();
+
+        for (byte b : bytes) {
+            formatter.format("%02x", b);
+        }
+
+        return formatter.toString();
     }
 }
