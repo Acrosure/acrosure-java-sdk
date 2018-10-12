@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SDK Demo Using Android</string>
+    <string name="button">Request</string>
+    <string name="textview">Json Value Here</string>
+</resources>
