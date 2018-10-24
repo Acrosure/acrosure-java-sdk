@@ -110,3 +110,69 @@ import com.acrosure.resource.Application;
 Application application = client.application().get("application_id");
 
 ```
+
+#### Update
+
+```Java
+import com.acrosure.resource.Application;
+
+// Modify the application
+application.getBasicData().put("spec","150")
+
+// Update (you can think of this as a sync function)
+client.application().update(application)
+```
+
+#### Get package(s)
+
+To get all the packages compatible with an application:
+
+```Java
+import com.acrosure.resource.Package;
+
+// ...
+
+Package[] packages = client.application().getPackages(application)
+```
+
+To get the package an application is currently selecting:
+
+```Java
+import com.acrosure.resource.Package;
+
+// ...
+
+Package aPackage = client.application().getPackage(application)
+```
+
+#### Select package
+
+```Java
+import com.acrosure.resource.Package;
+
+// ...
+
+Package[] packages = client.application().getPackages(application)
+
+// You can examine the packages before deciding which one should be used
+
+client.application().selectPackage(application, packages[0])
+```
+
+#### Submit
+
+```Java
+client.application().submit(application)
+```
+
+#### List
+
+```Java
+import com.acrosure.form.ApplicationQuery;
+
+// Set query
+ApplicationQuery query = new ApplicationQuery();
+query.setLimit(100);
+
+client.application().list(query);
+```
