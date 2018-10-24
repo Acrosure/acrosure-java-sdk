@@ -4,7 +4,7 @@ The official Acrosure SDK for Java.
 
 ## Documents (Java API)
 
-You can download the document (Java API) directly from Maven Central Repository. The name will be in a form like this: `acrosure-java-sdk-x.x.x-javadoc.jar`, where `x.x.x` is the version number.
+You can download the document (Java API) directly from Maven Central Repository (https://search.maven.org/ or other mirrors). The name will be in a form like this: `acrosure-java-sdk-x.x.x-javadoc.jar`, where `x.x.x` is the version number.
 
 
 ## Dependencies
