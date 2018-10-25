@@ -24,8 +24,8 @@ class OkHttpClient implements HttpClient {
         this.HOST = host;
         this.httpClient = new okhttp3
                 .OkHttpClient.Builder()
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
                 .build();
         this.mapper = new ObjectMapper();
     }
@@ -39,7 +39,6 @@ class OkHttpClient implements HttpClient {
 //        String responseString = response.body().string();
 //        System.out.println(responseString);
         ObjectNode jsonTreeResponse = (ObjectNode) mapper.readTree(response.body().byteStream());
-
 
         if (statusCode == 500)
             throw new AcrosureException("Server failed on executing the request", statusCode);

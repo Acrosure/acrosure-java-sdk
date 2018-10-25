@@ -52,8 +52,8 @@ class CARIntegrationTest {
             fail();
         }
 
-        basicDataUrl = this.getClass().getClassLoader().getResource("basic_data.json");
-        AdditionalDataUrl = this.getClass().getClassLoader().getResource("additional_data.json");
+        basicDataUrl = this.getClass().getClassLoader().getResource("car_basic_data.json");
+        AdditionalDataUrl = this.getClass().getClassLoader().getResource("car_additional_data.json");
     }
 
     @Test

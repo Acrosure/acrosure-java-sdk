@@ -17,6 +17,9 @@ import org.junit.jupiter.api.TestInstance;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.Properties;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -39,8 +42,10 @@ class MotorIntegrationTest {
         try {
             prop.load(configStream);
             String token = prop.getProperty("secret_token");
-            String host = prop.getProperty("remote_host");
-            client = new Acrosure(token, host);
+//            String host = prop.getProperty("remote_host");
+//            String token = "sandbox_tokn_mFkNBPpRbnEMPh2u";
+//            String host = prop.getProperty("local_host");
+            client = new Acrosure(token);
             application = client.application().create("prod_motor");
         } catch (IOException e) {
             e.printStackTrace();
@@ -112,9 +117,11 @@ class MotorIntegrationTest {
     void List_ByDefault_ReturnsApplicationsWithPagination() {
         try {
             ApplicationQuery query = new ApplicationQuery();
+            query.setProductID("prod_motor");
             ApplicationList applicationList = client.application().list(query);
 
             System.out.println(applicationList.getPagination().getTotal());
+            System.out.println(Arrays.toString(applicationList.getData()));
 
             assertTrue(applicationList.getData().length > 0);
         } catch (IOException e) {
@@ -225,6 +232,7 @@ class MotorIntegrationTest {
             }
 
             ObjectNode additionalData = (ObjectNode) mapper.readTree(AdditionalDataUrl);
+            additionalData.put("chassis_no", generateChassisNo());
             application.setAdditionalData(additionalData);
             client.application().update(application);
 
@@ -252,12 +260,13 @@ class MotorIntegrationTest {
                 packages = client.application().getPackages(application);
                 client.application().selectPackage(application, packages[0]);
                 ObjectNode additionalData = (ObjectNode) mapper.readTree(AdditionalDataUrl);
+                additionalData.put("chassis_no", generateChassisNo());
                 application.setAdditionalData(additionalData);
                 client.application().update(application);
             }
 
             Policy[] policies = client.application().confirm(application);
-            System.out.println(policies);
+            System.out.println(Arrays.toString(policies));
 
             assertTrue(policies.length > 0);
 
@@ -269,5 +278,11 @@ class MotorIntegrationTest {
             e.printStackTrace();
             fail();
         }
+    }
+
+    static String generateChassisNo() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date = new Date();
+        return "TT" + sdf.format(date);
     }
 }
