@@ -4,23 +4,34 @@ The official Acrosure SDK for Java.
 
 ## Documents (Java API)
 
-You can download the document (Java API) directly from Maven Central Repository (https://search.maven.org/ or other mirrors). The name will be in a form like this: `acrosure-java-sdk-x.x.x-javadoc.jar`, where `x.x.x` is the version number.
+You can download the document (Java API) directly from Maven Central Repository
+(https://search.maven.org/ or other mirrors). The name will be in a form like
+this: `acrosure-java-sdk-x.x.x-javadoc.jar`, where `x.x.x` is the version
+number.
 
 
 ## Dependencies
 
-* [jackson-databind](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind) _(tested with version 2.9.6)_
-* [okhttp](https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp) _(tested with version 3.10.0)_
+* [jackson-databind](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind)
+_(tested with version 2.9.6)_
+* [okhttp](https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp)
+_(tested with version 3.10.0)_
 
 ## Installation
 
-To install the SDK and its dependencies, you can download the JAR files directly from Maven Central Repository (https://search.maven.org/ or other mirrors). Or you can use your favorite Java dependency management tools such as Maven or Gradle.
+To install the SDK and its dependencies, you can download the JAR files
+directly from Maven Central Repository (https://search.maven.org/ or other
+mirrors). Or you can use your favorite Java dependency management tools such
+as Maven or Gradle.
 
 ### Manual installation
 
-Download all the JAR files from the [above links](#Dependencies), then download the SDK JAR file from this [link](https://mvnrepository.com/artifact/com.acrosure/acrosure-java-sdk).
+Download all the JAR files from the [above links](#Dependencies), then download
+the SDK JAR file from this [link](https://mvnrepository.com/artifact/com.acrosure/acrosure-java-sdk).
 
-After you get all JAR files (3 of them), you can just simply import it to your Java (or Android) projects using your favorite IDE, such as Eclipse, NetBeans, or IntelliJ IDEA.
+After you get all JAR files (3 of them), you can just simply import it to your
+Java (or Android) projects using your favorite IDE, such as Eclipse, NetBeans,
+or IntelliJ IDEA.
 
 ### Gradle
 
@@ -216,4 +227,111 @@ ApplicationQuery query = new ApplicationQuery();
 query.setLimit(100);
 
 client.application().list(query);
+```
+
+### Product
+
+#### Get
+
+```Java
+import com.acrosure.resource.Product;
+
+// ...
+
+Product product = client.product().get("prod_motor");
+```
+
+#### List
+
+```Java
+import com.acrosure.resource.Product;
+
+// ...
+
+Product[] products = client.product().list();
+```
+
+### Policy
+
+#### Get
+
+```Java
+import com.acrosure.resource.Policy;
+
+// ...
+
+Policy policy = client.policy().get("<policy-id>");
+```
+
+#### List
+
+```Java
+import com.acrosure.form.PolicyQuery;
+import com.acrosure.resource.PolicyList;
+
+// ...
+
+PolicyQuery query = new PolicyQuery();
+query.setLimit(100);
+
+PolicyList policyList = client.policy().list(query);
+```
+
+### Payment (2C2P)
+
+#### Get Hash
+
+```Java
+import com.acrosure.resource.PaymentFormData;
+
+// ...
+
+PaymentFormData formData = client.payment2C2P().getHash(
+        "sandbox_appl_eq6M2LBfm8n1nV2d",
+        "example.com");
+```
+
+### Data
+
+#### Get (with dependencies)
+
+```Java
+import com.acrosure.form.DataGetForm;
+import com.acrosure.resource.Data;
+
+// ...
+
+DataGetForm<String> form = new DataGetForm<>();
+form.setHandler("subdistrict");
+
+String[] dependencies = {"กรุงเทพมหานคร", "วังทองหลาง"};
+form.setDependencies(dependencies);
+
+Data[] data = client.data().get(form);
+```
+
+#### Get (without dependencies)
+
+```Java
+import com.acrosure.form.DataGetForm;
+import com.acrosure.resource.Data;
+
+// ...
+
+DataGetForm<Integer> form = new DataGetForm<>();
+form.setHandler("province");
+
+Data[] data = client.data().get(form);
+```
+
+### Team
+
+#### Get Info
+
+```Java
+import com.acrosure.resource.Team;
+
+// ...
+
+Team team = client.team().getInfo();
 ```
