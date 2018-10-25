@@ -16,7 +16,15 @@ You can download the document (Java API) directly from Maven Central Repository 
 
 To install the SDK and its dependencies, you can download the JAR files directly from Maven Central Repository (https://search.maven.org/ or other mirrors). Or you can use your favorite Java dependency management tools such as Maven or Gradle.
 
-In case of Gradle, add the following lines to your `build.gradle` file
+### Manual installation
+
+Download all the JAR files from the [above links](#Dependencies), then download the SDK JAR file from this [link](https://mvnrepository.com/artifact/com.acrosure/acrosure-java-sdk).
+
+After you get all JAR files (3 of them), you can just simply import it to your Java (or Android) projects using your favorite IDE, such as Eclipse, NetBeans, or IntelliJ IDEA.
+
+### Gradle
+
+Add the following lines to `dependencies` block inside your `build.gradle` file
 
 ```Java
 compile(
@@ -26,6 +34,39 @@ compile(
 )
 ```
 
+### Maven
+
+Add the following lines to `<dependencies>` block inside your `pom.xml` file
+
+```xml
+<dependency>
+    <groupId>com.squareup.okhttp3</groupId>
+    <artifactId>okhttp</artifactId>
+    <version>3.10.0</version>
+</dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.9.6</version>
+</dependency>
+<dependency>
+    <groupId>com.acrosure</groupId>
+    <artifactId>acrosure-java-sdk</artifactId>
+    <version>0.3.0</version>
+</dependency>
+```
+
+### Gradle (Android)
+
+Add the following lines to `dependencies` block inside your `build.gradle` file
+
+```Java
+implementation (
+    [group: 'com.acrosure', name: 'acrosure-java-sdk', version: '0.3.0'],
+    [group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.10.0'],
+    [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.6'],
+)
+```
 
 ## Getting started
 
