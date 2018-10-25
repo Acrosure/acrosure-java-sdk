@@ -1,7 +1,6 @@
 package com.acrosure.android;
 
 import android.app.Activity;
-import android.app.Application;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 import com.acrosure.Acrosure;
 import com.acrosure.AcrosureException;
 import com.acrosure.form.ApplicationCreateForm;
+import com.acrosure.form.ApplicationQuery;
 import com.acrosure.resource.Package;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -140,6 +140,7 @@ public class MainActivity extends Activity {
         try {
             ObjectNode basicData = (ObjectNode) mapper.readTree(stringBasicData);
             ObjectNode additionalData = (ObjectNode) mapper.readTree(stringAdditionalData);
+
             ApplicationCreateForm form = new ApplicationCreateForm();
             form.setProductId("prod_motor");
             form.setBasicData(basicData);
@@ -154,6 +155,9 @@ public class MainActivity extends Activity {
             Log.v("YOYOYO", "After get-package request");
             client.application().selectPackage(application, packages[0]);
             Log.v("YOYOYO", "After select-package request");
+            ApplicationQuery query = new ApplicationQuery();
+            query.setLimit(100);
+            client.application().list(query);
             done = true;
         } catch (IOException | AcrosureException e) {
             Log.d("MY_DEBUG", e.getMessage(), e.getCause());
