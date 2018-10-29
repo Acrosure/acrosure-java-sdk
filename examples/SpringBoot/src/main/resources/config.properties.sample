@@ -1,4 +1,3 @@
-secret_token="tokn_sample_secret"
-public_token="tokn_sample_public"
-remote_host="https://api.phantompage.com"
-local_host="http://localhost:8000"
+secret_token="<YOUR-SECRET-TOKEN>"
+public_token="<YOUR-PUBLIC-TOKEN>"
+remote_host="<API-URL>"
