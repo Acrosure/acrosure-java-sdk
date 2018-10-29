@@ -41,7 +41,7 @@ Add the following lines to `dependencies` block inside your `build.gradle` file
 compile(
 	[group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.10.0'],
 	[group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.6'],
-	[group: 'com.acrosure', name: 'acrosure-java-sdk', version: '0.3.0'],
+	[group: 'com.acrosure', name: 'acrosure-java-sdk', version: '0.4.0'],
 )
 ```
 
@@ -63,7 +63,7 @@ Add the following lines to `<dependencies>` block inside your `pom.xml` file
 <dependency>
     <groupId>com.acrosure</groupId>
     <artifactId>acrosure-java-sdk</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
 </dependency>
 ```
 
@@ -73,7 +73,7 @@ Add the following lines to `dependencies` block inside your `build.gradle` file
 
 ```Java
 implementation (
-    [group: 'com.acrosure', name: 'acrosure-java-sdk', version: '0.3.0'],
+    [group: 'com.acrosure', name: 'acrosure-java-sdk', version: '0.4.0'],
     [group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.10.0'],
     [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.6'],
 )
