@@ -31,8 +31,7 @@ public class MainController {
         try {
             prop.load(configStream);
             String token = prop.getProperty("secret_token");
-            String host = prop.getProperty("remote_host");
-            client = new Acrosure(token, host);
+            client = new Acrosure(token);
         } catch (IOException e) {
             e.printStackTrace();
         }
