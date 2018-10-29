@@ -7,7 +7,7 @@ The official Acrosure SDK for Java.
 You can download the document (Java API) directly from Maven Central Repository
 (https://search.maven.org/ or other mirrors). The name will be in a form similar to
 this: `acrosure-java-sdk-x.x.x-javadoc.jar`, where `x.x.x` is the version
-number.
+number. The live documentation can be found [here](https://acrosure.github.io/acrosure-java-sdk/).
 
 
 ## Dependencies
@@ -93,14 +93,14 @@ Acrosure client = new Acrosure("<your-public-token>");
 
 You can obtain the token from https://dashboard.acrosure.com/.
 
+_Note that there are two types of tokens: public and secret. One should carefully consider which of the token to be used in an application._
+
 ## Examples
 
 There are two available examples:
 
-* [Web service using Spring Boot]()
-* [Android application]()
-
-_Note that there are two types of tokens: public and secret. One should carefully consider which of the token to be used in an application._
+* [Web service using Spring Boot](https://github.com/Acrosure/acrosure-java-sdk/tree/master/examples/SpringBoot)
+* [Android application](https://github.com/Acrosure/acrosure-java-sdk/tree/master/examples/Android)
 
 ## Basic Usage
 
