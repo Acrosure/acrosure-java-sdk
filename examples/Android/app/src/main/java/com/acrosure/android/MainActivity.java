@@ -146,8 +146,7 @@ public class MainActivity extends Activity {
             form.setBasicData(basicData);
             form.setAdditionalData(additionalData);
             String token = Helper.getConfigValue(this, "secret_token");
-            String host = Helper.getConfigValue(this, "remote_host");
-            Acrosure client = new Acrosure(token, host);
+            Acrosure client = new Acrosure(token);
             Log.v("YOYOYO", "Before request");
             application = client.application().create(form);
             Log.v("YOYOYO", "After create request");
