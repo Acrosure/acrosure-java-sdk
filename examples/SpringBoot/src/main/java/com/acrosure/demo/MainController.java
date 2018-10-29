@@ -38,6 +38,27 @@ public class MainController {
         }
     }
 
+    @RequestMapping("/")
+    public String home() {
+        return "<html>" +
+                "<body>" +
+                "<form action=\"/all\">\n" +
+                "<input type=\"submit\" value=\"Test\" />\n" +
+                "</form>" +
+                "</body>" +
+                "</html>";
+    }
+
+    @RequestMapping("/all")
+    public Policy[] all() throws IOException, AcrosureException {
+        create();
+        selectPackage();
+        update();
+        Policy[] policies = confirm();
+
+        return policies;
+    }
+
     @RequestMapping("/create")
     public Application create() throws IOException, AcrosureException {
         String stringBasicData = "{\n" +
